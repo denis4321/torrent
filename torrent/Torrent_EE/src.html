@@ -1,0 +1,3511 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"><html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<title>Трекер</title>
+<base href="http://rutracker.org/forum/">
+<link rel="stylesheet" href="http://static.rutracker.org/templates/default/css/main.css?v=25" type="text/css">
+
+<link rel="shortcut icon" href="http://static.rutracker.org/favicon.ico" type="image/x-icon">
+
+<link rel="search" type="application/opensearchdescription+xml" title="Поиск на rutracker.org" href="http://static.rutracker.org/opensearch.xml">
+
+<script type="text/javascript" src="http://static.rutracker.org/js/jquery.pack.js?v=20"></script>
+
+<script type="text/javascript" src="http://static.rutracker.org/js/main.js?v=20"></script>
+
+
+<script type="text/javascript">
+var BB            = {};
+var BB_ROOT       = "./";
+var cookieDomain  = ".rutracker.org";
+var cookiePath    = "/forum/";
+var cookieSecure  = 0;
+var cookiePrefix  = "bb_";
+var LOGGED_IN     = 1;
+var InfoWinParams = 'width=780,height=510,resizable=yes';
+
+var user = {
+	opt_js: {"only_new":0,"h_flag":0,"h_av":0,"h_rnk_i":0,"h_post_i":0,"i_aft_l":0,"h_smile":0,"h_sig":0,"sp_op":0,"tr_tm":0,"h_cat":"","h_tsp":0,"hl_tr":1},
+
+	set: function(opt, val, days, reload) {
+		this.opt_js[opt] = val;
+		setCookie('opt_js', $.toJSON(this.opt_js), days);
+		if (reload) {
+			window.location.reload();
+		}
+	}
+}
+
+$(function(){
+	$('a.dl-stub').each(function(){
+		var $a = $(this);
+		var href = $a.attr('href');
+		var t_id = href.slice( href.lastIndexOf('=')+1 );
+		var event = ($.browser.opera) ? 'mouseover' : 'mousedown';
+		$a.bind(event, function(){
+			setCookie('bb_dl', t_id, 'SESSION')
+		});
+		$a.click(function(){
+			$('#dl-form').attr('action', href);
+			$('#dl-form').submit();
+			return false;
+		});
+	});
+		$('form.tokenized').append('<input type="hidden" name="form_token" value="1e9554f969aa594ed2ed0af4c10107e3" />');
+	ajax.form_token = '1e9554f969aa594ed2ed0af4c10107e3';
+		});
+
+var ajax = new Ajax('http://rutracker.org/forum/ajax.php', 'POST', 'json');
+
+function getElText (e)
+{
+	var t = '';
+	if (e.textContent !== undefined) {
+		t = e.textContent;
+	}
+	else if (e.innerText !== undefined) {
+		t = e.innerText;
+	}
+	else {
+		t = jQuery(e).text();
+	}
+	return t;
+}
+function escHTML (txt) {
+	return txt.replace(/</g, '&lt;');
+}
+function cfm (txt)
+{
+	return window.confirm(txt);
+}
+function post2url (url, params) {
+	params = params || {};
+	var f = document.createElement('form');
+	f.setAttribute('method', 'post');
+	f.setAttribute('action', url);
+	params['form_token'] = '1e9554f969aa594ed2ed0af4c10107e3';
+	for (var k in params) {
+		var h = document.createElement('input');
+		h.setAttribute('type', 'hidden');
+		h.setAttribute('name', k);
+		h.setAttribute('value', params[k]);
+		f.appendChild(h);
+	}
+	document.body.appendChild(f);
+	f.submit();
+	return false;
+}
+</script>
+
+<!--[if lte IE 6]><script type="text/javascript">
+$(ie6_make_clickable_labels);
+
+$(function(){
+	$('div.menu-sub').prepend('<iframe class="ie-fix-select-overlap"></iframe>'); // iframe for IE select box z-index issue
+	Menu.iframeFix = true;
+});
+</script><![endif]-->
+
+
+<!--[if gte IE 7]><style type="text/css">
+input[type="checkbox"] { margin-bottom: -1px; }
+</style><![endif]-->
+
+<!--[if lte IE 6]><style type="text/css">
+.forumline th { height: 24px; padding: 2px 4px; }
+.menu-sub iframe.ie-fix-select-overlap { display: none; display/**/: block; position: absolute; z-index: -1; filter: mask(); }
+</style><![endif]-->
+
+<!--[if IE]><style type="text/css">
+.post-hr { margin: 2px auto; }
+.fieldsets div > p { margin-bottom: 0; }
+</style><![endif]-->
+
+<style type="text/css">
+img.t-spacer { width: 142px; margin-top: -1px; }
+.hidden, .menu-sub, #ajax-loading, #ajax-error, var.ajax-params, .sp-title { display: none; }
+#adriver-240x120 { width: 240px; height: 120px; padding-bottom: 2px; margin-right: -2px; }
+#adriver-468x60, #pr-468x60  { width: 468px; height: 60px; }
+#latest_news table { width: 100%; }
+#sidebar1_wrap { margin-top: -4px; }
+/* temp */
+
+
+
+/* temp end */
+
+</style>
+
+</head>
+
+<body>
+
+<style type="text/css">
+#fs-nav-ul .b { font-weight: bold; }
+#fs-nav-ul li, #fs-nav-close { cursor: pointer; }
+#fs-nav-ul span.f:hover, #fs-nav-close:hover { color: blue; background: #DEE2E4; }
+#fs-nav-list { border: 3px double #9AA7AD; background: #EFEFEF; padding: 8px; max-height: 500px; overflow: auto; }
+#fs-sel-cat { width: 260px; }
+#fs-sel-cat option.cat-title { font-weight: bold; color: #005A88; background: #F5F5F5; }
+</style>
+
+<script type="text/javascript">
+var FSN = {
+	fs_all      : '',
+	fs_og       : [],
+	fs_lb       : [],
+	sel_width   : null,
+	scroll      : $.browser.mozilla,
+	nav_inited  : false,
+
+	show_nav: function() {
+		$('#fs>legend').empty().append( $('#fs-nav-legend').contents() );
+	},
+	build_nav: function() {
+
+		if (FSN.nav_inited) return;
+
+		var $fieldset = $('fieldset#fs');
+		var $select = $('select:last', $fieldset);
+		var $optgroup = $('optgroup', $select);
+
+		$optgroup.each(function(i){
+			var $og = $(this);
+			$og.attr({ id: 'og-'+i });
+			FSN.fs_og[i] = $(this).html();
+			FSN.fs_lb[i] = $(this).attr('label');
+			$('#fs-sel-cat').append('<option class="cat-title" value="'+ i +'">&nbsp;&nbsp;&middot;&nbsp;'+ FSN.fs_lb[i] +'&nbsp;</option>\n');
+			$('<li><span class="b">'+ FSN.fs_lb[i] +'</span>\n<ul id="nav-c-'+ i +'"></ul>\n</li>').appendTo('#fs-nav-ul').click(function(){
+				if (FSN.scroll) {
+					$select.scrollTo('#og-'+i);
+				}
+			});
+			$('option', $og).each(function(){
+				var $op = $(this);
+				if ($op[0].className) {
+					$('<li><span class="f">'+ $op.html() +'</span>\n</li>').appendTo('#nav-c-'+ i).click(function(e){
+						e.stopPropagation();
+						if (FSN.scroll) {
+							$select.scrollTo( '#'+$op.attr('id'), { duration:300 } ).scrollTo( '-=3px' );
+						}
+						$('option', $select).attr({ selected: 0 });
+						$('#'+$op.attr('id')).attr({ selected: 1 });
+						$('#fs-nav-list').fadeOut();
+					});
+				}
+			});
+		});
+
+		$('#fs-nav-ul').treeview({ collapsed: true });
+		// фикс для FF2, чтобы меню не выстраивалось лесенкой
+		if ($.browser.mozilla && parseFloat($.browser.version) <= 1.8) {
+			$('#fs-nav-list ul').after('<div style="margin-top: 1px;"></div>');
+		}
+
+		$('#fs-sel-cat').bind('change', function(){
+			var i = $(this).val();
+			if (FSN.sel_width == null) {
+				FSN.sel_width = $select.width() + 4;
+			}
+			// опера не понимает <optgroup> при популяции селекта [http://dev.jquery.com/ticket/3040]
+			if ($.browser.opera) {
+				if (i == 'all') {
+					$select.empty().append('<option id="fs--1" value="-1">&nbsp;Все имеющиеся</option>\n');
+					$.each(FSN.fs_og, function(i, v){
+					 $select.append( $(document.createElement('optgroup')).attr('label', FSN.fs_lb[i]).append(FSN.fs_og[i]) );
+					});
+				}
+				else {
+					$select.empty().append( $(document.createElement('optgroup')).attr('label', FSN.fs_lb[i]).append(FSN.fs_og[i]) );
+				}
+			}
+			else {
+				if (i == 'all') {
+					var fs_html = FSN.fs_all;
+				}
+				else {
+					var fs_html = '<optgroup label="'+ FSN.fs_lb[i] +'">'+ FSN.fs_og[i] +'</optgroup>';
+				}
+				$select.html(fs_html).focus();
+			}
+			if (i == 'all') {
+				$('#fs-nav-menu').show();
+			}
+			else {
+				$('#fs-nav-menu').hide();
+			}
+			$select.width(FSN.sel_width);
+		});
+
+		FSN.fs_all = $select.html();
+
+		FSN.nav_inited = true;
+	}
+};
+
+$(function(){
+	FSN.show_nav();
+	$('#fs legend').one('mouseenter', FSN.build_nav);
+});
+</script>
+
+<div class="menu-sub" id="fs-nav-list">
+	<div class="tRight"><span id="fs-nav-close" class="med" onclick="$('#fs-nav-list').hide();"> [ закрыть ] </span></div>
+
+	<ul id="fs-nav-ul" class="tree-root"></ul>
+</div>
+
+<div id="fs-nav-legend" style="display: none;">
+	<select id="fs-sel-cat"><option value="all">&nbsp;Выбрать категорию...&nbsp;</option></select>
+	<span id="fs-nav-menu">&middot;&nbsp;<a class="menu-root" href="#fs-nav-list">перейти к разделу</a></span>
+</div>
+
+
+<!--cse-->
+<script type="text/javascript">
+$(function(){
+	$('#cse-search-btn, #cse-search-btn-top').click(function(){
+		var text_match_input_id = $(this).attr('href');
+		var text_match = $('#'+text_match_input_id).val();
+		if (text_match == '') {
+			$('#'+text_match_input_id).addClass('hl-err-input').focus();
+			return false;
+		}
+		$('#cse-text-match').val( text_match );
+		$('#cse-submit-btn').click();
+		return false;
+	});
+
+	$('#quick-search').submit(function(){
+		var action = $('#search-action').val();
+		var txt = $('#search-text').val();
+		if (txt=='поиск...' || txt == '') {
+			$('#search-text').val('').addClass('hl-err-input').focus();
+			return false;
+		}
+		if (action == 'cse') {
+			$('#cse-search-btn-top').click();
+			return false;
+		}
+		else {
+			$(this).attr('action', action);
+		}
+	});
+});
+</script>
+
+<div id="cse-form-holder" style="display: none;">
+<form action="search_cse.php" id="cse-search-box">
+	<input type="hidden" name="cx" value="014434608714260776013:ggcq1kovlga" />
+	<input type="hidden" name="cof" value="FORID:9" />
+	<input type="hidden" name="ie" value="windows-1251" />
+	<input type="text" name="q" size="60" value="" id="cse-text-match" />
+	<input type="submit" name="sa" value="Поиск в Google" id="cse-submit-btn" />
+</form>
+</div>
+<!--/cse-->
+
+<form method="post" action="" id="dl-form" style="display: none;"></form>
+
+
+<div class="menu-sub" id="pg-jump">
+	<table cellspacing="1" cellpadding="4">
+	<tr><th>К странице...</th></tr>
+	<tr><td>
+		<form method="get" onsubmit="return go_to_page();">
+			<input id="pg-page" type="text" size="5" maxlength="4" />
+			<input type="submit" value="Перейти"/>
+		</form>
+
+	</td></tr>
+	</table>
+</div>
+<script type="text/javascript">
+function go_to_page ()
+{
+	var page_num = (parseInt( $('#pg-page').val() ) > 1) ? $('#pg-page').val() : 1;
+	var pg_start = (page_num - 1) * 50;
+	window.location = 'tracker.php?search_id=WOW8TgDKtT4G&start=' + pg_start;
+	return false;
+}
+</script>
+
+
+
+
+<div id="body_container">
+
+<!--************************************************************************-->
+<!--=COMMON_HEADER==========================================================-->
+
+<script type="text/javascript">
+if (top != self) {
+	allowed_top = /translate/i;
+	if (top.location.hostname != self.location.hostname && !top.location.hostname.match(allowed_top)) {
+		alert('in frame!'+'\n\n'+top.location.hostname);
+		top.location.href = self.document.location;
+	}
+}
+// var clickaider_cid = "2b0f2b47-11885";
+// var clickaider_track_links = "marked";
+
+var begun_iframe_domain = '195.82.146.52';
+var begun_blocks_cnt    = 0;
+
+function begun_init_block (params)
+{
+	// один блок на страницу
+	if (begun_blocks_cnt > 0) {
+		return;
+	}
+	var iframe_file = 'iframe-begun-user-str-2.html';
+	// приведение location к адресу доступному гостям (начальная страница топика)
+	var loc = (params.location_href != null) ? params.location_href : '';
+	if (loc.indexOf('&') != -1) {
+		loc = loc.substring(0, loc.indexOf('&'));
+	}
+	var append_char = (loc.indexOf('?') == -1) ? '?' : '&';
+	var fix = (params.fix_style != null) ? params.fix_style : '';
+	var begun_query = [
+		'bid='+ params.begun_block_id,
+		'bgc='+ params.bg_color,
+		'ref='+ encodeURIComponent(document.referrer),
+		'loc='+ encodeURIComponent(loc + append_char +'query=человек-паук 2'),
+		'fix='+ encodeURIComponent(fix),
+		'rnd='+ Math.random()
+	];
+	var frame_width  = params.frame_width  || '100%';
+	var frame_height = params.frame_height || 17;
+	$(function(){
+		$('#'+params.container_id).html('<iframe src="http://'+ begun_iframe_domain +'/'+ iframe_file +'?'+ begun_query.join('&') +'" frameborder=0 width="'+ frame_width +'" height="'+ frame_height +'" marginwidth=0 marginheight=0 scrolling=no></iframe>');
+	});
+	begun_blocks_cnt++;
+}
+
+$(function(){
+	var rnd = Math.round(Math.random()*1000000000);
+	var ref = document.referrer ? escape(document.referrer) : 'unknown';
+	$('#adriver-240x120').html('<iframe src="http://ad.adriver.ru/cgi-bin/erle.cgi?sid=85725&sz=tracker240&target=blank&bt=8&pz=0&tail256='+ ref +'&rnd='+ rnd +'" frameborder=0 vspace=0 hspace=0 width=240 height=120 marginwidth=0 marginheight=0 scrolling=no></iframe>');
+	$('#adriver-468x60').html('<iframe src="http://ad.adriver.ru/cgi-bin/erle.cgi?sid=85725&sz=tracker468&target=blank&bt=1&pz=0&tail256='+ ref +'&rnd='+ rnd +'" frameborder=0 vspace=0 hspace=0 width=468 height=60 marginwidth=0 marginheight=0 scrolling=no></iframe>');
+	$('#filepost-guest').html('&nbsp; &middot; &nbsp;<a href="http://filepost.ru/?page=501455" target="_blank" style="color: brown;"><b>Скачать через FilePost и получить CD/DVD по почте</b></a>');
+});
+
+</script>
+
+<!--page_container-->
+<div id="page_container">
+<a name="top"></a>
+
+<!--page_header-->
+<div id="page_header">
+
+<!--main_nav-->
+<div id="main-nav"  style="height: 17px;">
+	<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="nowrap">
+
+			<a href="./index.php"><b>Главная</b></a>&#0183;
+			<a href="tracker.php"><b>Трекер</b></a>&#0183;
+			<a href="search.php"><b>Поиск</b></a>&#0183;
+			<a href="viewtopic.php?t=1045"><b>Правила</b></a>&#0183;
+			<a href="http://wiki.rutracker.org/" target="_blank"><b>FAQ</b></a>&#0183;
+			<a href="groupcp.php"><b>Группы</b></a>&#0183;
+
+			<a href="info.php?show=copyright_holders" onclick="window.open(this.href, '', InfoWinParams); return false;"><b>Для правообладателей</b></a>
+		</td>
+		<td class="nowrap" align="right">
+						<a href="http://pm.rutracker.org/forum/privmsg.php?folder=inbox"><b>Личные сообщения (новых нет)</b></a>
+					</td>
+	</tr>
+	</table>
+</div>
+
+<!--/main-nav-->
+
+<!--logo-->
+<div id="logo">
+	<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td style="padding: 13px 0 14px 6px;">
+			<a href="./index.php"><img src="http://static.rutracker.org/images/logo/logo_rto.gif" width="320" height="68" alt="logo" /></a>
+		</td>
+<!--
+		<td style="padding: 5px 0 4px 6px;">
+			<a href="./index.php"><img src="http://static.rutracker.org/images/logo/logo_ny_2011_4.gif" width="320" height="85" alt="logo" /></a>
+		</td>
+-->
+		<td width="100%" class="tCenter" style="padding: 0 6px 0 6px;">
+
+
+			
+			<table cellpadding="0" cellspacing="0" class="bCenter" style="padding: 4px 6px 0 6px;">
+
+						<tr>
+				<td>
+					<div class="tCenter bCenter"><iframe src="http://b.ddestiny.ru/bb/rutracker_top?rnd=1986465095" frameborder=0 vspace=0 hspace=0 width=600 height=90 marginwidth=0 marginheight=0 scrolling=no></iframe></div>
+				</td>
+			</tr>
+						</table>
+
+				</td>
+	</tr>
+	</table>
+</div>
+<!--/logo-->
+
+<!--topmenu-->
+<div class="topmenu">
+<table width="100%" cellpadding="0" cellspacing="0">
+<tr>
+		<td width="50%">
+		Вы зашли как: &nbsp;<a href="./profile.php?mode=viewprofile&amp;u=22822406"><b class="med">torrentme2</b></a>&nbsp; [ <a href="#" onclick="return post2url('http://login.rutracker.org/forum/login.php', {logout: 1});">Выход</a> ]
+	</td>
+
+	
+		<td style="padding: 2px;">
+<div>
+<form id="quick-search" method="post" action="">
+	<input type="hidden" name="max" value="1" />
+	<input type="hidden" name="to" value="1" />
+	<input id="search-text" type="text" name="nm" value="человек-паук 2" style="width: 200px;" />
+	<select id="search-action">
+		<option value="tracker.php" selected="selected"> раздачи </option>
+		<option value="search.php"> все темы </option>
+
+				<option value="cse"> в google </option>
+	</select>
+	<input type="submit" class="med bold" value="&raquo;" style="width: 30px;" />
+</form>
+<a style="display: none;" id="cse-search-btn-top" href="search-text">&nbsp;</a>
+</div>
+	</td>
+	
+		<td width="50%" class="tRight">
+		<a href="profile.php?mode=editprofile">Настройки</a>
+
+		&#0183;
+		<a href="./profile.php?mode=viewprofile&amp;u=22822406">Профиль</a> <a href="#dls-menu" class="menu-root menu-alt1"><img src="http://static.rutracker.org/templates/default/images/menu_open_1.gif" class="menu-alt1" alt="\/" /></a>
+		&#0183;
+		<a href="search.php?uid=22822406">Мои сообщения</a>
+	</td>
+	</tr>
+</table>
+</div><!--/topmenu-->
+
+<noscript>
+	<style type="text/css">
+	.sp-body, .sp-title { display: block; }
+	</style>
+</noscript>
+
+<div class="menu-sub" id="dls-menu">
+	<div class="menu-a bold nowrap">
+		<a class="med" href="tracker.php?rid=22822406">Текущие раздачи</a>
+		<a class="med" href="./profile.php?mode=viewprofile&amp;u=22822406">Текущие закачки</a>
+		<a class="med" href="search.php?dlu=22822406&amp;dlc=1">Прошлые закачки</a>
+		<a class="med" href="search.php?dlu=22822406&amp;dlw=1">Будущие закачки</a>
+
+	</div>
+</div>
+
+<!--breadcrumb-->
+<!--<div id="breadcrumb"></div>-->
+<!--/breadcrumb-->
+
+
+</div>
+<!--/page_header-->
+
+
+
+<!--page_content-->
+<div id="page_content">
+<table cellspacing="0" cellpadding="0" border="0" style="width: 100%;"><tr>
+
+
+<!--main_content-->
+<td id="main_content">
+<div id="main_content_wrap">
+
+
+<!--========================================================================-->
+<!--************************************************************************-->
+
+
+
+<!-- page_header.tpl END -->
+<!-- module_xx.tpl START -->
+
+<table cellpadding="2" cellspacing="0" width="100%">
+<tr>
+
+	<td valign="bottom" width="100%">
+		<h1 class="maintitle">Трекер</h1>
+		<p class="small" style="margin: 12px 4px 8px;"><b><a class="menu-root" href="#pg-jump">Страницы</a> :&nbsp;&nbsp;<b>1</b>, <a class="pg" href="tracker.php?search_id=WOW8TgDKtT4G&amp;start=50">2</a>&nbsp;&nbsp;<a class="pg" href="tracker.php?search_id=WOW8TgDKtT4G&amp;start=50">След.</a></b></p>
+		<p class="med bold" style="margin: 12px 4px 10px;">Результатов поиска: 59 (max: 500)</p>
+
+		<table cellpadding="2" cellspacing="0" width="100%">
+			<tr>
+				<td class="nav" width="100%"><a href="./index.php">Список форумов rutracker.org</a></td>
+			</tr>
+		</table>
+
+	</td>
+	<td>
+
+	<div id="adriver-240x120"></div>	</td>
+</tr>
+</table>
+
+
+<div id="search_opt" style="display: none;">
+<form id="tr-form" method="post" action="tracker.php" autocomplete="off">
+
+<input type="hidden" name="prev_my" value="0" />
+<input type="hidden" name="prev_new" value="0" />
+<input type="hidden" name="prev_oop" value="0" />
+
+<table class="bordered w100" cellspacing="0">
+<col class="row1">
+<tr>
+
+	<th class="thHead">Поиск по раздачам</th>
+</tr>
+<tr>
+	<td class="row4" style="padding: 4px;">
+
+<table class="fieldsets borderless bCenter pad_0" cellspacing="0">
+<tr>
+	<td rowspan="2" width="50%">
+
+<fieldset id="fs">
+<legend>Искать в форумах</legend>
+<div>
+
+	<p class="select">
+		<select id="fs-main" style="width: 100%;" name="f[]" multiple="multiple" size="20">
+		<option id="fs--1" value="-1">&nbsp;Все имеющиеся</option><optgroup label="&nbsp;Кино, Видео и ТВ">
+<option id="fs-7" value="7" class="root_forum has_sf">Зарубежное кино&nbsp;</option>
+<option id="fs-187" value="187"> |- Классика зарубежного кино&nbsp;</option>
+<option id="fs-2090" value="2090"> |- Фильмы до 2000 года&nbsp;</option>
+<option id="fs-2091" value="2091"> |- Фильмы 2001-2005&nbsp;</option>
+
+<option id="fs-2092" value="2092"> |- Фильмы 2006-2009&nbsp;</option>
+<option id="fs-2093" value="2093"> |- Фильмы 2010-2011&nbsp;</option>
+<option id="fs-934" value="934"> |- Азиатские фильмы&nbsp;</option>
+<option id="fs-505" value="505"> |- Индийское кино&nbsp;</option>
+<option id="fs-212" value="212"> |- Сборники на DVD и Сиквелы&nbsp;</option>
+<option id="fs-1235" value="1235"> |- Грайндхаус&nbsp;</option>
+
+<option id="fs-185" value="185"> |- Звуковые дорожки и Переводы&nbsp;</option>
+<option id="fs-22" value="22" class="root_forum has_sf">Наше кино&nbsp;</option>
+<option id="fs-941" value="941"> |- Кино СССР&nbsp;</option>
+<option id="fs-1666" value="1666"> |- Детские отечественные фильмы&nbsp;</option>
+<option id="fs-124" value="124" class="root_forum has_sf">Арт-хаус и авторское кино&nbsp;</option>
+<option id="fs-1543" value="1543"> |- Короткий метр (Арт-хаус и авторское кино)&nbsp;</option>
+<option id="fs-376" value="376"> |- Авторские дебюты&nbsp;</option>
+
+<option id="fs-709" value="709"> |- Документальные фильмы (Арт-хаус и авторское кино)&nbsp;</option>
+<option id="fs-1577" value="1577"> |- Анимация (Арт-хаус и авторское кино)&nbsp;</option>
+<option id="fs-511" value="511" class="root_forum has_sf">Театр&nbsp;</option>
+<option id="fs-656" value="656"> |- Бенефис. Мастера искусств отечественного Театра и Кино.&nbsp;</option>
+<option id="fs-93" value="93" class="root_forum has_sf">DVD и HD Video&nbsp;</option>
+<option id="fs-572" value="572"> |- Арт-хаус и авторское кино (DVD, HD Video)&nbsp;</option>
+<option id="fs-905" value="905"> |- Классика зарубежного кино (DVD, HD Video)&nbsp;</option>
+
+<option id="fs-1576" value="1576"> |- Азиатские фильмы (DVD, HD Video)&nbsp;</option>
+<option id="fs-101" value="101"> |- Зарубежное кино (DVD)&nbsp;</option>
+<option id="fs-100" value="100"> |- Наше кино (DVD)&nbsp;</option>
+<option id="fs-1670" value="1670"> |- Грайндхаус DVD и HD Video&nbsp;</option>
+<option id="fs-103" value="103"> |- Документальные (DVD)&nbsp;</option>
+<option id="fs-313" value="313"> |- Зарубежное кино (HD Video)&nbsp;</option>
+
+<option id="fs-312" value="312"> |- Наше кино (HD Video)&nbsp;</option>
+<option id="fs-314" value="314"> |- Документальные (HD Video)&nbsp;</option>
+<option id="fs-352" value="352" class="root_forum has_sf">3D/Стерео Кино, Видео, TV и Спорт&nbsp;</option>
+<option id="fs-549" value="549"> |- 3D Кинофильмы&nbsp;</option>
+<option id="fs-1213" value="1213"> |- 3D Мультфильмы&nbsp;</option>
+<option id="fs-2109" value="2109"> |- 3D Документальные фильмы&nbsp;</option>
+
+<option id="fs-514" value="514"> |- 3D Спорт&nbsp;</option>
+<option id="fs-4" value="4" class="root_forum has_sf">Мультфильмы&nbsp;</option>
+<option id="fs-521" value="521"> |- Иностранные мультфильмы (DVD)&nbsp;</option>
+<option id="fs-1900" value="1900"> |- Отечественные мультфильмы (DVD)&nbsp;</option>
+<option id="fs-930" value="930"> |- Мультфильмы (HD Video)&nbsp;</option>
+<option id="fs-208" value="208"> |- Отечественные мультфильмы&nbsp;</option>
+
+<option id="fs-539" value="539"> |- Отечественные полнометражные мультфильмы&nbsp;</option>
+<option id="fs-822" value="822"> |- Сборники мультфильмов и сиквелы&nbsp;</option>
+<option id="fs-209" value="209"> |- Иностранные мультфильмы&nbsp;</option>
+<option id="fs-484" value="484"> |- Иностранные короткометражные мультфильмы&nbsp;</option>
+<option id="fs-921" value="921" class="root_forum has_sf">Мультсериалы&nbsp;</option>
+<option id="fs-922" value="922"> |- Аватар&nbsp;</option>
+
+<option id="fs-1247" value="1247"> |- Гриффины / Family guy&nbsp;</option>
+<option id="fs-923" value="923"> |- Губка Боб Квадратные Штаны&nbsp;</option>
+<option id="fs-2066" value="2066"> |- &quot;Спокойной ночи, малыши&quot; и другие телепередачи для детей&nbsp;</option>
+<option id="fs-924" value="924"> |- Симпсоны&nbsp;</option>
+<option id="fs-1991" value="1991"> |- Скуби-ду / Scooby-Doo&nbsp;</option>
+
+<option id="fs-925" value="925"> |- Том и Джерри&nbsp;</option>
+<option id="fs-1165" value="1165"> |- Трансформеры&nbsp;</option>
+<option id="fs-1245" value="1245"> |- Утиные истории / Duck Tales&nbsp;</option>
+<option id="fs-928" value="928"> |- Футурама / Futurama&nbsp;</option>
+<option id="fs-926" value="926"> |- Человек-Паук / Новые приключения Человека-паука&nbsp;</option>
+<option id="fs-1246" value="1246"> |- Черепашки Мутанты Ниндзя / Teenage Mutant Ninja Turtles&nbsp;</option>
+
+<option id="fs-1250" value="1250"> |- Чип и Дейл / Chip And Dale&nbsp;</option>
+<option id="fs-927" value="927"> |- Южный Парк / South Park&nbsp;</option>
+<option id="fs-1248" value="1248"> |- Для некондиционных раздач&nbsp;</option>
+<option id="fs-33" value="33" class="root_forum has_sf">Аниме&nbsp;</option>
+<option id="fs-281" value="281"> |- Манга&nbsp;</option>
+<option id="fs-1386" value="1386"> |- Обои, артбуки и др.&nbsp;</option>
+
+<option id="fs-1387" value="1387"> |- AMV и др. ролики&nbsp;</option>
+<option id="fs-1388" value="1388"> |- OST (lossless)&nbsp;</option>
+<option id="fs-282" value="282"> |- OST (mp3 и другие lossy-форматы)&nbsp;</option>
+<option id="fs-599" value="599"> |- Аниме (DVD)&nbsp;</option>
+<option id="fs-1105" value="1105"> |- Аниме (HD Video)&nbsp;</option>
+<option id="fs-1389" value="1389"> |- Аниме (основной подраздел)&nbsp;</option>
+
+<option id="fs-404" value="404"> |- Покемоны&nbsp;</option>
+<option id="fs-1390" value="1390"> |- Наруто&nbsp;</option>
+<option id="fs-1642" value="1642"> |- Гандам&nbsp;</option>
+<option id="fs-1391" value="1391"> |- Призрак в доспехах&nbsp;</option>
+<option id="fs-893" value="893"> |- Японские мультфильмы&nbsp;</option>
+<option id="fs-1478" value="1478"> |- Для некондиционных раздач&nbsp;</option>
+
+</optgroup>
+<optgroup label="&nbsp;Документалистика и юмор">
+<option id="fs-670" value="670" class="root_forum has_sf">Вера и религия&nbsp;</option>
+<option id="fs-2107" value="2107"> |- Ислам&nbsp;</option>
+<option id="fs-294" value="294"> |- Религии Индии, Тибета и Восточной Азии&nbsp;</option>
+<option id="fs-1453" value="1453"> |- Современные религиозные, духовные и мистические учения&nbsp;</option>
+<option id="fs-1475" value="1475"> |- Христианство&nbsp;</option>
+<option id="fs-46" value="46" class="root_forum has_sf">Документальные фильмы и телепередачи&nbsp;</option>
+
+<option id="fs-251" value="251"> |- Криминальная документалистика&nbsp;</option>
+<option id="fs-671" value="671"> |- Биографии. Личности и кумиры&nbsp;</option>
+<option id="fs-1456" value="1456"> |- Диагностика кармы&nbsp;</option>
+<option id="fs-97" value="97"> |- Военное дело&nbsp;</option>
+<option id="fs-851" value="851"> |- Вторая мировая война&nbsp;</option>
+<option id="fs-821" value="821"> |- Авиация&nbsp;</option>
+
+<option id="fs-2076" value="2076"> |- Космос&nbsp;</option>
+<option id="fs-98" value="98"> |- Тайны века / Спецслужбы / Теории Заговоров&nbsp;</option>
+<option id="fs-56" value="56"> |- Научно-популярные фильмы&nbsp;</option>
+<option id="fs-1469" value="1469"> |- Архитектура и строительство&nbsp;</option>
+<option id="fs-1568" value="1568"> |- Кулинария&nbsp;</option>
+<option id="fs-2123" value="2123"> |- Флора и фауна&nbsp;</option>
+
+<option id="fs-1479" value="1479"> |- Рыболовство и подводная охота&nbsp;</option>
+<option id="fs-1280" value="1280"> |- Битва экстрасенсов / Теория невероятности / Искатели / Г..&nbsp;</option>
+<option id="fs-876" value="876"> |- Путешествия и туризм&nbsp;</option>
+<option id="fs-752" value="752"> |- Русские сенсации / Программа Максимум / Профессия репорт..&nbsp;</option>
+<option id="fs-1114" value="1114"> |- Паранормальные явления&nbsp;</option>
+<option id="fs-1467" value="1467"> |- Информационно-аналитические и общественно-политические п..&nbsp;</option>
+
+<option id="fs-672" value="672"> |- Всё о доме, быте и дизайне&nbsp;</option>
+<option id="fs-249" value="249"> |- BBC&nbsp;</option>
+<option id="fs-552" value="552"> |- Discovery&nbsp;</option>
+<option id="fs-500" value="500"> |- National Geographic&nbsp;</option>
+<option id="fs-2112" value="2112"> |- История: Древний мир / Античность / Средневековье&nbsp;</option>
+<option id="fs-1327" value="1327"> |- История: Новое и Новейшее время&nbsp;</option>
+
+<option id="fs-1468" value="1468"> |- Эпоха СССР&nbsp;</option>
+<option id="fs-24" value="24" class="root_forum has_sf">Развлекательные телепередачи и шоу, приколы и юмор&nbsp;</option>
+<option id="fs-1959" value="1959"> |- Интеллектуальные игры и викторины&nbsp;</option>
+<option id="fs-115" value="115"> |- 33 квадратных метра / О.С.П. - студия&nbsp;</option>
+<option id="fs-939" value="939"> |- Реалити и ток-шоу / номинации / показы&nbsp;</option>
+<option id="fs-1481" value="1481"> |- Детские телешоу&nbsp;</option>
+
+<option id="fs-113" value="113"> |- КВН&nbsp;</option>
+<option id="fs-882" value="882"> |- Кривое Зеркало / Городок / В Городке&nbsp;</option>
+<option id="fs-1482" value="1482"> |- Ледовые шоу&nbsp;</option>
+<option id="fs-393" value="393"> |- Слава богу, ты пришел!&nbsp;</option>
+<option id="fs-1569" value="1569"> |- Званый ужин&nbsp;</option>
+<option id="fs-373" value="373"> |- Хорошие Шутки&nbsp;</option>
+
+<option id="fs-1186" value="1186"> |- Вечерний Квартал&nbsp;</option>
+<option id="fs-137" value="137"> |- Фильмы со смешным переводом (пародии) / Stand-up comedy&nbsp;</option>
+<option id="fs-1321" value="1321"> |- Минута славы&nbsp;</option>
+<option id="fs-532" value="532"> |- Украинские Шоу&nbsp;</option>
+<option id="fs-979" value="979"> |- Фабрика звезд&nbsp;</option>
+<option id="fs-827" value="827"> |- Танцевальные шоу, концерты, выступления&nbsp;</option>
+
+<option id="fs-1484" value="1484"> |- Цирк&nbsp;</option>
+<option id="fs-1485" value="1485"> |- Школа злословия&nbsp;</option>
+<option id="fs-114" value="114"> |- Сатирики и юмористы&nbsp;</option>
+<option id="fs-1332" value="1332"> |- Юмористические аудиопередачи&nbsp;</option>
+<option id="fs-1495" value="1495"> |- Аудио и видео ролики (Приколы и юмор)&nbsp;</option>
+</optgroup>
+<optgroup label="&nbsp;Спорт">
+
+<option id="fs-255" value="255" class="root_forum has_sf">Спортивные турниры, фильмы и передачи&nbsp;</option>
+<option id="fs-256" value="256"> |- Автоспорт&nbsp;</option>
+<option id="fs-1986" value="1986"> |- Мотоспорт&nbsp;</option>
+<option id="fs-1551" value="1551"> |- Формула-1 2011&nbsp;</option>
+<option id="fs-626" value="626"> |- Формула 1&nbsp;</option>
+<option id="fs-262" value="262"> |- Велоспорт&nbsp;</option>
+
+<option id="fs-1326" value="1326"> |- Волейбол/Гандбол&nbsp;</option>
+<option id="fs-978" value="978"> |- Бильярд&nbsp;</option>
+<option id="fs-1287" value="1287"> |- Покер&nbsp;</option>
+<option id="fs-1188" value="1188"> |- Бодибилдинг/Силовые виды спорта&nbsp;</option>
+<option id="fs-1667" value="1667"> |- Бокс&nbsp;</option>
+<option id="fs-1675" value="1675"> |- Классические единоборства&nbsp;</option>
+
+<option id="fs-257" value="257"> |- Смешанные единоборства и K-1&nbsp;</option>
+<option id="fs-845" value="845"> |- Рестлинг&nbsp;</option>
+<option id="fs-875" value="875"> |- Американский футбол&nbsp;</option>
+<option id="fs-263" value="263"> |- Регби&nbsp;</option>
+<option id="fs-2073" value="2073"> |- Бейсбол&nbsp;</option>
+<option id="fs-550" value="550"> |- Теннис&nbsp;</option>
+
+<option id="fs-2124" value="2124"> |- Бадминтон/Настольный теннис&nbsp;</option>
+<option id="fs-1470" value="1470"> |- Гимнастика/Соревнования по танцам&nbsp;</option>
+<option id="fs-528" value="528"> |- Лёгкая атлетика/Водные виды спорта&nbsp;</option>
+<option id="fs-486" value="486"> |- Зимние виды спорта&nbsp;</option>
+<option id="fs-854" value="854"> |- Фигурное катание&nbsp;</option>
+<option id="fs-2079" value="2079"> |- Биатлон&nbsp;</option>
+
+<option id="fs-260" value="260"> |- Экстрим&nbsp;</option>
+<option id="fs-2111" value="2111"> |- Экстрим (Skateboarding)&nbsp;</option>
+<option id="fs-1608" value="1608" class="root_forum has_sf">Футбол&nbsp;</option>
+<option id="fs-1952" value="1952"> |- Россия 2011-2012&nbsp;</option>
+<option id="fs-1613" value="1613"> |- Россия/СССР&nbsp;</option>
+<option id="fs-1614" value="1614"> |- Англия&nbsp;</option>
+
+<option id="fs-1623" value="1623"> |- Испания&nbsp;</option>
+<option id="fs-1615" value="1615"> |- Италия&nbsp;</option>
+<option id="fs-1630" value="1630"> |- Германия&nbsp;</option>
+<option id="fs-1616" value="1616"> |- Другие национальные чемпионаты и кубки&nbsp;</option>
+<option id="fs-2014" value="2014"> |- Международные турниры&nbsp;</option>
+<option id="fs-1617" value="1617"> |- Еврокубки&nbsp;</option>
+
+<option id="fs-1987" value="1987"> |- Еврокубки 2010-2012&nbsp;</option>
+<option id="fs-1620" value="1620"> |- Чемпионаты Европы&nbsp;</option>
+<option id="fs-1621" value="1621"> |- Чемпионаты Мира&nbsp;</option>
+<option id="fs-1998" value="1998"> |- Товарищеские турниры и матчи&nbsp;</option>
+<option id="fs-751" value="751"> |- Обзорные и аналитические передачи&nbsp;</option>
+<option id="fs-1697" value="1697"> |- Мини-футбол&nbsp;</option>
+
+<option id="fs-2004" value="2004" class="root_forum has_sf">Баскетбол&nbsp;</option>
+<option id="fs-2001" value="2001"> |- Международные соревнования&nbsp;</option>
+<option id="fs-2002" value="2002"> |- NBA / NCAA (до 2000 г.)&nbsp;</option>
+<option id="fs-283" value="283"> |- NBA / NCAA (2000-2010 гг.)&nbsp;</option>
+<option id="fs-1997" value="1997"> |- NBA / NCAA (2010-2011 гг.)&nbsp;</option>
+<option id="fs-2003" value="2003"> |- Европейский клубный баскетбол&nbsp;</option>
+
+<option id="fs-2009" value="2009" class="root_forum has_sf">Хоккей&nbsp;</option>
+<option id="fs-2010" value="2010"> |- Хоккей с мячом / Бенди&nbsp;</option>
+<option id="fs-2006" value="2006"> |- Международные турниры&nbsp;</option>
+<option id="fs-2007" value="2007"> |- KXЛ&nbsp;</option>
+<option id="fs-2005" value="2005"> |- НХЛ (до 2003/04)&nbsp;</option>
+<option id="fs-259" value="259"> |- НХЛ (с 2005/06)&nbsp;</option>
+
+<option id="fs-2008" value="2008"> |- СССР - Канада&nbsp;</option>
+<option id="fs-126" value="126"> |- Документальные фильмы и аналитика&nbsp;</option>
+</optgroup>
+<optgroup label="&nbsp;Сериалы">
+<option id="fs-9" value="9" class="root_forum has_sf">Русские сериалы&nbsp;</option>
+<option id="fs-104" value="104"> |- Автономка / Врачебная Тайна / Зона. Тюремный роман&nbsp;</option>
+<option id="fs-1535" value="1535"> |- Адвокат&nbsp;</option>
+<option id="fs-91" value="91"> |- Бандитский Петербург&nbsp;</option>
+
+<option id="fs-1356" value="1356"> |- Возвращение Мухтара&nbsp;</option>
+<option id="fs-856" value="856"> |- Волчица&nbsp;</option>
+<option id="fs-188" value="188"> |- Дарья Донцова&nbsp;</option>
+<option id="fs-1408" value="1408"> |- Ранетки / Последний аккорд&nbsp;</option>
+<option id="fs-310" value="310"> |- Кадетство / Кремлёвские курсанты&nbsp;</option>
+<option id="fs-202" value="202"> |- Каменская&nbsp;</option>
+
+<option id="fs-935" value="935"> |- Кармелита&nbsp;</option>
+<option id="fs-990" value="990"> |- Клуб&nbsp;</option>
+<option id="fs-80" value="80"> |- Моя прекрасная няня&nbsp;</option>
+<option id="fs-119" value="119"> |- Осторожно, Модерн!&nbsp;</option>
+<option id="fs-175" value="175"> |- След&nbsp;</option>
+<option id="fs-1530" value="1530"> |- Простые истины&nbsp;</option>
+
+<option id="fs-79" value="79"> |- Солдаты и пр.&nbsp;</option>
+<option id="fs-172" value="172"> |- Старшеклассники, ОБЖ&nbsp;</option>
+<option id="fs-812" value="812"> |- Счастливы вместе&nbsp;</option>
+<option id="fs-207" value="207"> |- Тайны следствия&nbsp;</option>
+<option id="fs-805" value="805"> |- Татьянин день&nbsp;</option>
+<option id="fs-123" value="123"> |- Убойная сила / Менты / Опера&nbsp;</option>
+
+<option id="fs-189" value="189" class="root_forum has_sf">Зарубежные сериалы&nbsp;</option>
+<option id="fs-271" value="271"> |- 24 часа / 24&nbsp;</option>
+<option id="fs-273" value="273"> |- Альф / ALF&nbsp;</option>
+<option id="fs-743" value="743"> |- Анатомия Грей / Grey&#039;s Anatomy; Частная Практика / Priva..&nbsp;</option>
+<option id="fs-184" value="184"> |- Баффи - Истребительница Вампиров / Buffy; Ангел / Angel&nbsp;</option>
+<option id="fs-842" value="842"> |- Беверли Хиллз 90210 / Beverly Hills 90210&nbsp;</option>
+
+<option id="fs-1605" value="1605"> |- Бухта Доусона / Dawson&#039;s Creek&nbsp;</option>
+<option id="fs-85" value="85"> |- Вавилон 5 / Babylon 5&nbsp;</option>
+<option id="fs-1144" value="1144"> |- Возвращение Шерлока Холмса / Return of Sherlock Holmes&nbsp;</option>
+<option id="fs-595" value="595"> |- Герои / Heroes&nbsp;</option>
+<option id="fs-1288" value="1288"> |- Декстер / Dexter&nbsp;</option>
+<option id="fs-1171" value="1171"> |- Дживс и Вустер / Jeeves and Wooster ; Шоу Фрая и Лори / ..&nbsp;</option>
+
+<option id="fs-1694" value="1694"> |- Династия / Dynasty&nbsp;</option>
+<option id="fs-820" value="820"> |- Доктор кто / Doctor Who; Торчвуд / Torchwood&nbsp;</option>
+<option id="fs-819" value="819"> |- Доктор Куин - женщина врач / Dr. Quinn, Medicine Woman&nbsp;</option>
+<option id="fs-625" value="625"> |- Доктор Хаус / House M.D.&nbsp;</option>
+<option id="fs-84" value="84"> |- Друзья / Friends + Джо / Joey&nbsp;</option>
+<option id="fs-242" value="242"> |- Женаты... с детьми / Married... with Children&nbsp;</option>
+
+<option id="fs-623" value="623"> |- За Гранью / Fringe&nbsp;</option>
+<option id="fs-1417" value="1417"> |- Земля: Последний Конфликт / Earth Final Conflict&nbsp;</option>
+<option id="fs-1798" value="1798"> |- Звёздные Врата: Атлантида / Stargate: Atlantis&nbsp;</option>
+<option id="fs-106" value="106"> |- Звёздные Врата: СГ1 / Stargate: SG1&nbsp;</option>
+<option id="fs-166" value="166"> |- Звёздный крейсер Галактика / Battlestar Galactica; Капри..&nbsp;</option>
+<option id="fs-236" value="236"> |- Звёздный путь / Star Trek&nbsp;</option>
+
+<option id="fs-507" value="507"> |- Как Я Встретил Вашу Маму / How I Met Your Mother; Теория..&nbsp;</option>
+<option id="fs-504" value="504"> |- Клан Сопрано / The Sopranos&nbsp;</option>
+<option id="fs-536" value="536"> |- Клиника / Scrubs&nbsp;</option>
+<option id="fs-173" value="173"> |- Коломбо / Columbo&nbsp;</option>
+<option id="fs-918" value="918"> |- Комиссар Рекс / Komissar Rex&nbsp;</option>
+<option id="fs-920" value="920"> |- Кости / Bones&nbsp;</option>
+
+<option id="fs-203" value="203"> |- Косяки / Weeds&nbsp;</option>
+<option id="fs-1243" value="1243"> |- Крутой Уокер. Правосудие по-техасски / Walker, Texas Ran..&nbsp;</option>
+<option id="fs-1120" value="1120"> |- Любовь и тайны Сансет Бич / Sunset Beach&nbsp;</option>
+<option id="fs-140" value="140"> |- Мастера Ужасов / Masters of Horror&nbsp;</option>
+<option id="fs-606" value="606"> |- Место преступления / CSI: Crime Scene Investigation&nbsp;</option>
+<option id="fs-776" value="776"> |- Мисс Марпл / Miss Marple&nbsp;</option>
+
+<option id="fs-194" value="194"> |- Мэш / MASH&nbsp;</option>
+<option id="fs-235" value="235"> |- На краю вселенной / FarScape&nbsp;</option>
+<option id="fs-636" value="636"> |- Одинокие сердца / The O.C&nbsp;</option>
+<option id="fs-1499" value="1499"> |- Она написала убийство / Murder, She Wrote; Перри Мейсон ..&nbsp;</option>
+<option id="fs-81" value="81"> |- Остаться в Живых / LOST&nbsp;</option>
+<option id="fs-266" value="266"> |- Отчаянные домохозяйки / Desperate Housewives&nbsp;</option>
+
+<option id="fs-252" value="252"> |- Побег из тюрьмы / Prison Break&nbsp;</option>
+<option id="fs-1102" value="1102"> |- Полиция Майами: Отдел нравов / Miaimi Vice&nbsp;</option>
+<option id="fs-1449" value="1449"> |- Рыцарь дорог / Knight Rider&nbsp;</option>
+<option id="fs-196" value="196"> |- Санта Барбара / Santa Barbara&nbsp;</option>
+<option id="fs-372" value="372"> |- Сверхъестественное / Supernatural&nbsp;</option>
+<option id="fs-110" value="110"> |- Секретные материалы / X-Files&nbsp;</option>
+
+<option id="fs-193" value="193"> |- Секс в большом городе / Sex And The City&nbsp;</option>
+<option id="fs-1531" value="1531"> |- Секс в другом городе / The L word; Близкие друзья / Quee..&nbsp;</option>
+<option id="fs-237" value="237"> |- Скользящие / Sliders&nbsp;</option>
+<option id="fs-265" value="265"> |- Скорая помощь / ER&nbsp;</option>
+<option id="fs-181" value="181"> |- Спрут / La Piovra&nbsp;</option>
+<option id="fs-1214" value="1214"> |- Тайны Ниро Вульфа / A Nero Wolfe Mystery&nbsp;</option>
+
+<option id="fs-497" value="497"> |- Тайны Смолвиля / Smallville&nbsp;</option>
+<option id="fs-121" value="121"> |- Твин пикс / Twin Peaks&nbsp;</option>
+<option id="fs-721" value="721"> |- Теория Лжи / Lie To Me&nbsp;</option>
+<option id="fs-1117" value="1117"> |- Холм одного дерева / One tree hill&nbsp;</option>
+<option id="fs-1359" value="1359"> |- Части Тела / Nip Tuck&nbsp;</option>
+<option id="fs-387" value="387"> |- Элен и ребята / Helene et les garcons&nbsp;</option>
+
+<option id="fs-134" value="134"> |- Эркюль Пуаро / Hercule Poirot&nbsp;</option>
+<option id="fs-195" value="195"> |- Для некондиционных раздач&nbsp;</option>
+<option id="fs-911" value="911" class="root_forum has_sf">Сериалы Испании, Латинской Америки и Португалии&nbsp;</option>
+<option id="fs-1691" value="1691"> |- Испанские сериалы&nbsp;</option>
+<option id="fs-1493" value="1493"> |- Актёры и актрисы латиноамериканских сериалов&nbsp;</option>
+<option id="fs-1500" value="1500"> |- OST&nbsp;</option>
+
+<option id="fs-1574" value="1574"> |- Латиноамериканские сериалы (раздачи папками)&nbsp;</option>
+<option id="fs-1539" value="1539"> |- Сериалы с субтитрами&nbsp;</option>
+<option id="fs-823" value="823"> |- Богатые тоже плачут / Los Ricos Tambien Lloran&nbsp;</option>
+<option id="fs-1006" value="1006"> |- Вдова бланко / La Viuda de Blanco&nbsp;</option>
+<option id="fs-972" value="972"> |- Во имя любви / Por Amor&nbsp;</option>
+<option id="fs-1299" value="1299"> |- Вторая жизнь / el Cuerpo del Deseo&nbsp;</option>
+
+<option id="fs-781" value="781"> |- Девушка по имени Судьба / Milagros&nbsp;</option>
+<option id="fs-717" value="717"> |- Дикая Роза / Rosa Salvaje&nbsp;</option>
+<option id="fs-1300" value="1300"> |- Дикий ангел / Muneca Brava&nbsp;</option>
+<option id="fs-1803" value="1803"> |- Донья Барбара / Dona Barbara&nbsp;</option>
+<option id="fs-1298" value="1298"> |- Дороги Индии / Caminho das &#205;ndias&nbsp;</option>
+<option id="fs-825" value="825"> |- Дурнушка Бетти / Yo Soy Betty la Fea&nbsp;</option>
+
+<option id="fs-1458" value="1458"> |- Жестокий ангел / Anjo Mau&nbsp;</option>
+<option id="fs-1463" value="1463"> |- Замарашка / Cara Sucia&nbsp;</option>
+<option id="fs-1459" value="1459"> |- История Золушки (Красивая Неудачница) / Bella Calamidade..&nbsp;</option>
+<option id="fs-1938" value="1938"> |- История любви / Historia de Amor&nbsp;</option>
+<option id="fs-1461" value="1461"> |- Качорра / Kachorra&nbsp;</option>
+<option id="fs-718" value="718"> |- Клон / O Clone&nbsp;</option>
+
+<option id="fs-1498" value="1498"> |- Клятва / El Juramento&nbsp;</option>
+<option id="fs-1939" value="1939"> |- Кофе с ароматом женщины / Cafe con aroma de Mujer&nbsp;</option>
+<option id="fs-907" value="907"> |- Лалола / Lalola&nbsp;</option>
+<option id="fs-877" value="877"> |- Мариелена / Marielena&nbsp;</option>
+<option id="fs-1940" value="1940"> |- Милагрос / Milagros&nbsp;</option>
+<option id="fs-992" value="992"> |- Морена Клара / Morena Clara&nbsp;</option>
+
+<option id="fs-607" value="607"> |- Моя вторая мама / Mi segunda Madre&nbsp;</option>
+<option id="fs-1606" value="1606"> |- Моя прекрасная толстушка / Mi Gorda Bella&nbsp;</option>
+<option id="fs-594" value="594"> |- Мятежный дух / Rebelde Way&nbsp;</option>
+<option id="fs-775" value="775"> |- Наследница / La Heredera&nbsp;</option>
+<option id="fs-534" value="534"> |- Никто, кроме тебя / Tu o Nadie&nbsp;</option>
+<option id="fs-777" value="777"> |- Новая Жертва / A Proxima Vitima&nbsp;</option>
+
+<option id="fs-1462" value="1462"> |- Падре Корахе / Padre Coraje&nbsp;</option>
+<option id="fs-704" value="704"> |- Пророк / O Profeta&nbsp;</option>
+<option id="fs-815" value="815"> |- Просто Мария / Simplemente Maria&nbsp;</option>
+<option id="fs-325" value="325"> |- Рабыня Изаура / Escrava Isaura&nbsp;</option>
+<option id="fs-1457" value="1457"> |- Реванш 2000 / Revanch 2000&nbsp;</option>
+<option id="fs-816" value="816"> |- Роковое Наследство / O Rei Do Gado&nbsp;</option>
+
+<option id="fs-1301" value="1301"> |- Самая красивая / Bellisima&nbsp;</option>
+<option id="fs-1692" value="1692"> |- Семейные узы / Lacos de Familia&nbsp;</option>
+<option id="fs-904" value="904"> |- Сила любви / Sabor a ti&nbsp;</option>
+<option id="fs-1540" value="1540"> |- Совершенная красота / Beleza pura&nbsp;</option>
+<option id="fs-694" value="694"> |- Тайны любви / Los Misterios del Amor&nbsp;</option>
+<option id="fs-1460" value="1460"> |- Тропиканка / Tropicaliente&nbsp;</option>
+
+<option id="fs-1949" value="1949"> |- Фаворитка / A Favorita&nbsp;</option>
+<option id="fs-1678" value="1678"> |- Хозяйка Судьбы / Senhora do Destino&nbsp;</option>
+<option id="fs-1541" value="1541"> |- Цыганская кровь / Soy gitano&nbsp;</option>
+<option id="fs-860" value="860"> |- Чёрная жемчужина / Perla Negra&nbsp;</option>
+<option id="fs-1941" value="1941"> |- Шторм / La Tormenta&nbsp;</option>
+<option id="fs-1537" value="1537"> |- Для некондиционных раздач&nbsp;</option>
+
+<option id="fs-2100" value="2100" class="root_forum has_sf">Азиатские сериалы&nbsp;</option>
+<option id="fs-2102" value="2102"> |- VMV и др. ролики&nbsp;</option>
+<option id="fs-2103" value="2103"> |- OST&nbsp;</option>
+<option id="fs-1242" value="1242"> |- Корейские сериалы&nbsp;</option>
+<option id="fs-2104" value="2104"> |- Японские сериалы&nbsp;</option>
+</optgroup>
+<optgroup label="&nbsp;Аудиокниги, обучающие видео">
+<option id="fs-395" value="395" class="root_forum has_sf">Аудиокниги&nbsp;</option>
+
+<option id="fs-574" value="574"> |- Аудиоспектакли и литературные чтения&nbsp;</option>
+<option id="fs-499" value="499"> |- Детективы, приключения, триллеры, боевики&nbsp;</option>
+<option id="fs-490" value="490"> |- Детская литература&nbsp;</option>
+<option id="fs-400" value="400"> |- Историческая книга&nbsp;</option>
+<option id="fs-1036" value="1036"> |- Жизнь замечательных людей&nbsp;</option>
+<option id="fs-401" value="401"> |- Фантастика, фэнтези, ужасы, мистика&nbsp;</option>
+
+<option id="fs-402" value="402"> |- Русская литература&nbsp;</option>
+<option id="fs-399" value="399"> |- Зарубежная литература&nbsp;</option>
+<option id="fs-716" value="716"> |- Бизнес&nbsp;</option>
+<option id="fs-695" value="695"> |- Поэзия&nbsp;</option>
+<option id="fs-530" value="530"> |- Традиционные религии&nbsp;</option>
+<option id="fs-2152" value="2152"> |- Нетрадиционные религиозно-философские учения&nbsp;</option>
+
+<option id="fs-403" value="403"> |- Учебная и научно-популярная литература&nbsp;</option>
+<option id="fs-1501" value="1501"> |- Аудиокниги на английском языке&nbsp;</option>
+<option id="fs-1580" value="1580"> |- Аудиокниги на немецком языке&nbsp;</option>
+<option id="fs-525" value="525"> |- Аудиокниги на других иностранных языках&nbsp;</option>
+<option id="fs-1263" value="1263" class="root_forum has_sf">Обучение иностранным языкам&nbsp;</option>
+<option id="fs-2057" value="2057"> |- Художественная литература на иностранных языках&nbsp;</option>
+
+<option id="fs-1264" value="1264"> |- Иностранные языки для детей&nbsp;</option>
+<option id="fs-1265" value="1265"> |- Английский язык&nbsp;</option>
+<option id="fs-1266" value="1266"> |- Немецкий язык&nbsp;</option>
+<option id="fs-1267" value="1267"> |- Французский язык&nbsp;</option>
+<option id="fs-1358" value="1358"> |- Испанский язык&nbsp;</option>
+<option id="fs-1268" value="1268"> |- Другие европейские языки&nbsp;</option>
+
+<option id="fs-1673" value="1673"> |- Арабский язык&nbsp;</option>
+<option id="fs-1269" value="1269"> |- Китайский язык&nbsp;</option>
+<option id="fs-1270" value="1270"> |- Японский язык&nbsp;</option>
+<option id="fs-1275" value="1275"> |- Другие восточные языки&nbsp;</option>
+<option id="fs-1276" value="1276"> |- Мультиязычные сборники&nbsp;</option>
+<option id="fs-1274" value="1274"> |- Разное&nbsp;</option>
+
+<option id="fs-610" value="610" class="root_forum has_sf">Видеоуроки и обучающие интерактивные DVD&nbsp;</option>
+<option id="fs-1542" value="1542"> |- Спорт&nbsp;</option>
+<option id="fs-1544" value="1544"> |- Фитнес и аэробика&nbsp;</option>
+<option id="fs-1545" value="1545"> |- Экстрим&nbsp;</option>
+<option id="fs-1546" value="1546"> |- Бодибилдинг&nbsp;</option>
+<option id="fs-1549" value="1549"> |- Оздоровительные практики&nbsp;</option>
+
+<option id="fs-1597" value="1597"> |- Йога&nbsp;</option>
+<option id="fs-1550" value="1550"> |- Уход за собой&nbsp;</option>
+<option id="fs-1552" value="1552"> |- Видео- и фотосъёмка&nbsp;</option>
+<option id="fs-1553" value="1553"> |- Рисование&nbsp;</option>
+<option id="fs-1554" value="1554"> |- Игра на гитаре&nbsp;</option>
+<option id="fs-617" value="617"> |- Ударные инструменты&nbsp;</option>
+
+<option id="fs-1555" value="1555"> |- Другие музыкальные инструменты&nbsp;</option>
+<option id="fs-2017" value="2017"> |- Игра на бас-гитаре&nbsp;</option>
+<option id="fs-1257" value="1257"> |- Бальные танцы&nbsp;</option>
+<option id="fs-1258" value="1258"> |- Танец живота&nbsp;</option>
+<option id="fs-677" value="677"> |- Танцы, разное&nbsp;</option>
+<option id="fs-1255" value="1255"> |- Охота&nbsp;</option>
+
+<option id="fs-1261" value="1261"> |- Фокусы и трюки&nbsp;</option>
+<option id="fs-614" value="614"> |- Образование&nbsp;</option>
+<option id="fs-1259" value="1259"> |- Бизнес, экономика и финансы&nbsp;</option>
+<option id="fs-2065" value="2065"> |- Беременность, роды, материнство&nbsp;</option>
+<option id="fs-1254" value="1254"> |- Учебные видео для детей&nbsp;</option>
+<option id="fs-1260" value="1260"> |- Психология&nbsp;</option>
+
+<option id="fs-1547" value="1547"> |- Строительство, ремонт и дизайн&nbsp;</option>
+<option id="fs-1548" value="1548"> |- Дерево- и металлообработка&nbsp;</option>
+<option id="fs-615" value="615"> |- Разное&nbsp;</option>
+<option id="fs-1581" value="1581" class="root_forum has_sf">Боевые искусства (Видеоуроки)&nbsp;</option>
+<option id="fs-1590" value="1590"> |- Айкидо и айки-дзюцу&nbsp;</option>
+<option id="fs-1587" value="1587"> |- Вин чун&nbsp;</option>
+
+<option id="fs-1594" value="1594"> |- Джиу-джитсу&nbsp;</option>
+<option id="fs-1591" value="1591"> |- Дзюдо и самбо&nbsp;</option>
+<option id="fs-1588" value="1588"> |- Каратэ&nbsp;</option>
+<option id="fs-1596" value="1596"> |- Ножевой бой&nbsp;</option>
+<option id="fs-1585" value="1585"> |- Работа с оружием&nbsp;</option>
+<option id="fs-1586" value="1586"> |- Русский стиль&nbsp;</option>
+
+<option id="fs-2078" value="2078"> |- Рукопашный бой&nbsp;</option>
+<option id="fs-1929" value="1929"> |- Смешанные стили&nbsp;</option>
+<option id="fs-1593" value="1593"> |- Ударные стили&nbsp;</option>
+<option id="fs-1592" value="1592"> |- Ушу&nbsp;</option>
+<option id="fs-1595" value="1595"> |- Разное&nbsp;</option>
+<option id="fs-1556" value="1556" class="root_forum has_sf">Компьютерные видеоуроки и обучающие интерактивные DVD&nbsp;</option>
+
+<option id="fs-1560" value="1560"> |- Компьютерные сети и безопасность&nbsp;</option>
+<option id="fs-1561" value="1561"> |- ОС и серверные программы Microsoft&nbsp;</option>
+<option id="fs-1653" value="1653"> |- Офисные программы Microsoft&nbsp;</option>
+<option id="fs-1570" value="1570"> |- ОС и программы семейства UNIX&nbsp;</option>
+<option id="fs-1654" value="1654"> |- Adobe Photoshop&nbsp;</option>
+<option id="fs-1655" value="1655"> |- Autodesk Maya&nbsp;</option>
+
+<option id="fs-1656" value="1656"> |- Autodesk 3ds Max&nbsp;</option>
+<option id="fs-1930" value="1930"> |- Autodesk Softimage (XSI)&nbsp;</option>
+<option id="fs-1931" value="1931"> |- ZBrush&nbsp;</option>
+<option id="fs-1932" value="1932"> |- Flash, Flex и ActionScript&nbsp;</option>
+<option id="fs-1562" value="1562"> |- 2D-графика&nbsp;</option>
+<option id="fs-1563" value="1563"> |- 3D-графика&nbsp;</option>
+
+<option id="fs-1626" value="1626"> |- Инженерные и научные программы&nbsp;</option>
+<option id="fs-1564" value="1564"> |- Web-дизайн&nbsp;</option>
+<option id="fs-1565" value="1565"> |- Программирование&nbsp;</option>
+<option id="fs-1559" value="1559"> |- Программы для Mac OS&nbsp;</option>
+<option id="fs-1566" value="1566"> |- Работа с видео&nbsp;</option>
+<option id="fs-1573" value="1573"> |- Работа со звуком&nbsp;</option>
+
+<option id="fs-1567" value="1567"> |- Разное (Компьютерные видеоуроки)&nbsp;</option>
+</optgroup>
+<optgroup label="&nbsp;Книги и журналы">
+<option id="fs-21" value="21" class="root_forum has_sf">Книги&nbsp;</option>
+<option id="fs-1802" value="1802"> |- Спорт, физическая культура&nbsp;</option>
+<option id="fs-2056" value="2056"> |- Боевые искусства, единоборства&nbsp;</option>
+<option id="fs-2157" value="2157"> |- Кино, театр, ТВ, мультипликация&nbsp;</option>
+<option id="fs-765" value="765"> |- Рисунок, графический дизайн&nbsp;</option>
+
+<option id="fs-2019" value="2019"> |- Фото и видеосъемка&nbsp;</option>
+<option id="fs-31" value="31"> |- Журналы (общий раздел)&nbsp;</option>
+<option id="fs-862" value="862"> |- Комиксы&nbsp;</option>
+<option id="fs-1427" value="1427"> |- Эзотерика, нетрадиционные религиозно-философские учения&nbsp;</option>
+<option id="fs-1696" value="1696"> |- Популярная психология&nbsp;</option>
+<option id="fs-39" value="39"> |- Разное&nbsp;</option>
+
+<option id="fs-1101" value="1101" class="root_forum has_sf">Для детей и родителей&nbsp;</option>
+<option id="fs-745" value="745"> |- Учебная и развивающая литература для детского сада и нач..&nbsp;</option>
+<option id="fs-1689" value="1689"> |- Учебная и познавательная литература для старших классов ..&nbsp;</option>
+<option id="fs-1353" value="1353"> |- Досуг и творчество&nbsp;</option>
+<option id="fs-1400" value="1400"> |- Воспитание и развитие&nbsp;</option>
+<option id="fs-2046" value="2046"> |- Худ. лит-ра для детей и подростков&nbsp;</option>
+
+<option id="fs-1680" value="1680" class="root_forum has_sf">Гуманитарные науки&nbsp;</option>
+<option id="fs-1967" value="1967"> |- Исторические источники&nbsp;</option>
+<option id="fs-2020" value="2020"> |- Исторические науки. Издания до 1917г. вкл.&nbsp;</option>
+<option id="fs-1801" value="1801"> |- Исторические науки. Издания 1918-1991&nbsp;</option>
+<option id="fs-1683" value="1683"> |- Исторические науки. Издания 1992-по н.в.&nbsp;</option>
+<option id="fs-1681" value="1681"> |- Альтернативные исторические теории&nbsp;</option>
+
+<option id="fs-2049" value="2049"> |- Биографии. Личности и кумиры. Мемуары&nbsp;</option>
+<option id="fs-1684" value="1684"> |- Искусствоведение. Культурология&nbsp;</option>
+<option id="fs-1685" value="1685"> |- Филология&nbsp;</option>
+<option id="fs-995" value="995"> |- Философия&nbsp;</option>
+<option id="fs-1686" value="1686"> |- Религиоведение&nbsp;</option>
+<option id="fs-767" value="767"> |- Психология. Педагогика&nbsp;</option>
+
+<option id="fs-2022" value="2022"> |- Социология. Политология. Журналистика&nbsp;</option>
+<option id="fs-764" value="764"> |- Бизнес, менеджмент, маркетинг&nbsp;</option>
+<option id="fs-1688" value="1688"> |- Экономика, финансы и кредит&nbsp;</option>
+<option id="fs-1687" value="1687"> |- Юридические науки. Право. Криминалистика&nbsp;</option>
+<option id="fs-2023" value="2023" class="root_forum has_sf">Точные, естественные и инженерные науки&nbsp;</option>
+<option id="fs-2024" value="2024"> |- Авиация / космонавтика&nbsp;</option>
+
+<option id="fs-2026" value="2026"> |- Физика / астрономия&nbsp;</option>
+<option id="fs-2027" value="2027"> |- Биология / экология&nbsp;</option>
+<option id="fs-295" value="295"> |- Химия / биохимия&nbsp;</option>
+<option id="fs-2028" value="2028"> |- Математика&nbsp;</option>
+<option id="fs-2029" value="2029"> |- География / геология / геодезия&nbsp;</option>
+<option id="fs-1325" value="1325"> |- Электроника / радио / автоматизация&nbsp;</option>
+
+<option id="fs-2031" value="2031"> |- Архитектура / строительство / инженерные сети&nbsp;</option>
+<option id="fs-2030" value="2030"> |- Машиностроение / материаловедение&nbsp;</option>
+<option id="fs-2054" value="2054"> |- Энергетика / электротехника&nbsp;</option>
+<option id="fs-770" value="770"> |- Нефтяная, газовая и химическая промышленность&nbsp;</option>
+<option id="fs-1528" value="1528"> |- Нормативная документация&nbsp;</option>
+<option id="fs-2032" value="2032"> |- Журналы: научные, научно-популярные, радио и др.&nbsp;</option>
+
+<option id="fs-768" value="768" class="root_forum has_sf">Военное дело&nbsp;</option>
+<option id="fs-2099" value="2099"> |- Милитария&nbsp;</option>
+<option id="fs-2021" value="2021"> |- Военная история&nbsp;</option>
+<option id="fs-1447" value="1447"> |- Военная техника&nbsp;</option>
+<option id="fs-2033" value="2033" class="root_forum has_sf">Коллекционирование, увлечения и хобби&nbsp;</option>
+<option id="fs-1412" value="1412"> |- Коллекционирование и вспомогательные ист. дисциплины&nbsp;</option>
+<option id="fs-1446" value="1446"> |- Вышивание&nbsp;</option>
+
+<option id="fs-753" value="753"> |- Вязание, плетение&nbsp;</option>
+<option id="fs-2037" value="2037"> |- Шитье, пэчворк&nbsp;</option>
+<option id="fs-1410" value="1410"> |- Другие виды декоративно-прикладного искусства&nbsp;</option>
+<option id="fs-2034" value="2034"> |- Домашние питомцы и аквариумистика / Охота и рыбалка&nbsp;</option>
+<option id="fs-1961" value="1961"> |- Кулинария&nbsp;</option>
+<option id="fs-565" value="565"> |- Моделизм&nbsp;</option>
+
+<option id="fs-1523" value="1523"> |- Приусадебное хозяйство / Цветоводство&nbsp;</option>
+<option id="fs-1575" value="1575"> |- Ремонт, частное строительство, дизайн интерьеров&nbsp;</option>
+<option id="fs-769" value="769"> |- Прочие хобби&nbsp;</option>
+<option id="fs-2038" value="2038" class="root_forum has_sf">Художественная литература&nbsp;</option>
+<option id="fs-2041" value="2041"> |- Классическая литература и современная проза&nbsp;</option>
+<option id="fs-2042" value="2042"> |- Поэзия&nbsp;</option>
+
+<option id="fs-2043" value="2043"> |- Историческая книга&nbsp;</option>
+<option id="fs-2044" value="2044"> |- Детектив, боевик&nbsp;</option>
+<option id="fs-2039" value="2039"> |- Любовный роман&nbsp;</option>
+<option id="fs-2045" value="2045"> |- Отечественная фантастика / фэнтези / мистика&nbsp;</option>
+<option id="fs-2080" value="2080"> |- Зарубежная фантастика / фэнтези / мистика&nbsp;</option>
+<option id="fs-2047" value="2047"> |- Художественная литература (Разное)&nbsp;</option>
+
+<option id="fs-1418" value="1418" class="root_forum has_sf">Компьютерная литература&nbsp;</option>
+<option id="fs-1422" value="1422"> |- Программы от Microsoft&nbsp;</option>
+<option id="fs-1423" value="1423"> |- Другие программы&nbsp;</option>
+<option id="fs-1424" value="1424"> |- Mac OS; Linux, FreeBSD и прочие *NIX&nbsp;</option>
+<option id="fs-1445" value="1445"> |- СУБД&nbsp;</option>
+<option id="fs-1425" value="1425"> |- Веб-дизайн и программирование&nbsp;</option>
+
+<option id="fs-1426" value="1426"> |- Программирование&nbsp;</option>
+<option id="fs-1428" value="1428"> |- Графика (Компьютерная литература)&nbsp;</option>
+<option id="fs-1429" value="1429"> |- Сети / VoIP (Компьютерная литература)&nbsp;</option>
+<option id="fs-1430" value="1430"> |- Хакинг и безопасность&nbsp;</option>
+<option id="fs-1431" value="1431"> |- Железо (книги о ПК)&nbsp;</option>
+<option id="fs-1432" value="1432"> |- Компьютерные журналы и приложения к ним&nbsp;</option>
+
+<option id="fs-1433" value="1433"> |- Разное (Компьютерная литература)&nbsp;</option>
+<option id="fs-2048" value="2048" class="root_forum has_sf">Коллекции книг и библиотеки&nbsp;</option>
+<option id="fs-2114" value="2114"> |- Мультимедийные и интерактивные издания&nbsp;</option>
+<option id="fs-1238" value="1238"> |- Библиотеки (зеркала сетевых библиотек/коллекций)&nbsp;</option>
+<option id="fs-2055" value="2055"> |- Тематические коллекции (подборки)&nbsp;</option>
+<option id="fs-754" value="754"> |- Многопредметные коллекции (подборки)&nbsp;</option>
+
+</optgroup>
+<optgroup label="&nbsp;Все по авто и мото">
+<option id="fs-1964" value="1964" class="root_forum has_sf">Ремонт и эксплуатация транспортных средств&nbsp;</option>
+<option id="fs-1973" value="1973"> |- Оригинальные каталоги по подбору запчастей&nbsp;</option>
+<option id="fs-1974" value="1974"> |- Неоригинальные каталоги по подбору запчастей&nbsp;</option>
+<option id="fs-1975" value="1975"> |- Программы по диагностике и ремонту&nbsp;</option>
+<option id="fs-1976" value="1976"> |- Тюнинг, чиптюнинг, настройка&nbsp;</option>
+<option id="fs-1977" value="1977"> |- Книги по ремонту/обслуживанию/эксплуатации ТС&nbsp;</option>
+
+<option id="fs-1203" value="1203"> |- Мультимедийки по ремонту/обслуживанию/эксплуатации ТС&nbsp;</option>
+<option id="fs-1978" value="1978"> |- Учет, утилиты и прочее&nbsp;</option>
+<option id="fs-1979" value="1979"> |- Виртуальная автошкола&nbsp;</option>
+<option id="fs-1980" value="1980"> |- Видеоуроки по вождению транспортных средств&nbsp;</option>
+<option id="fs-1981" value="1981"> |- Видеоуроки по ремонту транспортных средств&nbsp;</option>
+<option id="fs-1970" value="1970"> |- Журналы по авто/мото&nbsp;</option>
+
+<option id="fs-334" value="334"> |- Водный транспорт&nbsp;</option>
+<option id="fs-1202" value="1202" class="root_forum has_sf">Фильмы и телепередачи по авто/мото&nbsp;</option>
+<option id="fs-1982" value="1982"> |- Развлекательные передачи&nbsp;</option>
+<option id="fs-1983" value="1983"> |- Тест драйв/Обзоры/Автосалоны&nbsp;</option>
+<option id="fs-1984" value="1984"> |- Тюнинг/форсаж&nbsp;</option>
+<option id="fs-1985" value="1985"> |- Документальные/познавательные фильмы&nbsp;</option>
+
+<option id="fs-2151" value="2151"> |- Фильмы и телепередачи по авто/мото (DVD и HD Video)&nbsp;</option>
+</optgroup>
+<optgroup label="&nbsp;Музыка">
+<option id="fs-406" value="406" class="root_forum has_sf">Джаз и Блюз&nbsp;</option>
+<option id="fs-1168" value="1168"> |- Многоканальная музыка (Джаз и Блюз)&nbsp;</option>
+<option id="fs-430" value="430"> |- Зарубежный Джаз и Блюз (Hi-Res stereo)&nbsp;</option>
+<option id="fs-1659" value="1659"> |- Собственные оцифровки (Джаз и Блюз)&nbsp;</option>
+<option id="fs-434" value="434"> |- Отечественный Джаз (mp3)&nbsp;</option>
+
+<option id="fs-440" value="440"> |- Отечественный Джаз (lossless)&nbsp;</option>
+<option id="fs-1488" value="1488"> |- Отечественный Блюз (mp3)&nbsp;</option>
+<option id="fs-1489" value="1489"> |- Отечественный Блюз (lossless)&nbsp;</option>
+<option id="fs-449" value="449"> |- Зарубежный Джаз (mp3)&nbsp;</option>
+<option id="fs-450" value="450"> |- Зарубежный Джаз (lossless)&nbsp;</option>
+<option id="fs-1490" value="1490"> |- Зарубежный Блюз (mp3)&nbsp;</option>
+
+<option id="fs-1491" value="1491"> |- Зарубежный Блюз (lossless)&nbsp;</option>
+<option id="fs-501" value="501"> |- Джаз и Блюз (Видео)&nbsp;</option>
+<option id="fs-985" value="985"> |- Джаз и Блюз (DVD Video)&nbsp;</option>
+<option id="fs-409" value="409" class="root_forum has_sf">Классическая и современная академическая музыка&nbsp;</option>
+<option id="fs-1660" value="1660"> |- Собственные оцифровки (Классическая музыка)&nbsp;</option>
+<option id="fs-1164" value="1164"> |- Многоканальная музыка (Классика и классика в современной..&nbsp;</option>
+
+<option id="fs-1884" value="1884"> |- Классика и классика в современной обработке (Hi-Res ster..&nbsp;</option>
+<option id="fs-445" value="445"> |- Классическая музыка (Видео)&nbsp;</option>
+<option id="fs-984" value="984"> |- Классическая музыка (DVD и HD Видео)&nbsp;</option>
+<option id="fs-702" value="702"> |- Опера (Видео)&nbsp;</option>
+<option id="fs-983" value="983"> |- Опера (DVD и HD Видео)&nbsp;</option>
+<option id="fs-1990" value="1990"> |- Балет и современная хореография (Видео, DVD и HD Видео)&nbsp;</option>
+
+<option id="fs-560" value="560"> |- Полные собрания сочинений и многодисковые издания (lossl..&nbsp;</option>
+<option id="fs-794" value="794"> |- Опера (lossless)&nbsp;</option>
+<option id="fs-556" value="556"> |- Вокальная и хоровая музыка (lossless)&nbsp;</option>
+<option id="fs-557" value="557"> |- Оркестровая музыка (lossless)&nbsp;</option>
+<option id="fs-558" value="558"> |- Камерная инструментальная музыка (lossless)&nbsp;</option>
+<option id="fs-793" value="793"> |- Сольная инструментальная музыка (lossless)&nbsp;</option>
+
+<option id="fs-436" value="436"> |- Классическая музыка (mp3 и другие lossy-форматы)&nbsp;</option>
+<option id="fs-969" value="969"> |- Классическая музыка в современной обработке&nbsp;</option>
+<option id="fs-405" value="405" class="root_forum has_sf">Поп музыка, Eurodance, Disco&nbsp;</option>
+<option id="fs-424" value="424"> |- Отечественная Поп музыка (mp3)&nbsp;</option>
+<option id="fs-1361" value="1361"> |- Отечественная Поп музыка (сборники) (mp3)&nbsp;</option>
+<option id="fs-425" value="425"> |- Отечественная Поп музыка (lossless)&nbsp;</option>
+
+<option id="fs-428" value="428"> |- Зарубежная Поп музыка (mp3)&nbsp;</option>
+<option id="fs-1362" value="1362"> |- Зарубежная Поп музыка (сборники) (mp3)&nbsp;</option>
+<option id="fs-429" value="429"> |- Зарубежная Поп музыка (lossless)&nbsp;</option>
+<option id="fs-863" value="863"> |- Eurodance, Technopop, Disco (mp3)&nbsp;</option>
+<option id="fs-1363" value="1363"> |- Eurodance, Technopop, Disco (сборники) (mp3)&nbsp;</option>
+<option id="fs-864" value="864"> |- Eurodance, Technopop, Disco (lossless)&nbsp;</option>
+
+<option id="fs-1330" value="1330"> |- Восточноазиатская поп-музыка (lossless)&nbsp;</option>
+<option id="fs-1331" value="1331"> |- Восточноазиатская поп-музыка (mp3)&nbsp;</option>
+<option id="fs-1121" value="1121"> |- Отечественная Поп музыка (Видео)&nbsp;</option>
+<option id="fs-1122" value="1122"> |- Отечественная Поп музыка (DVD Video)&nbsp;</option>
+<option id="fs-431" value="431"> |- Зарубежная Поп музыка (Видео)&nbsp;</option>
+<option id="fs-986" value="986"> |- Зарубежная Поп музыка (DVD Video)&nbsp;</option>
+
+<option id="fs-2088" value="2088"> |- Отечественная Поп музыка (Сборные концерты, документальн..&nbsp;</option>
+<option id="fs-2089" value="2089"> |- Зарубежная Поп музыка (Сборные концерты, документальное ..&nbsp;</option>
+<option id="fs-1444" value="1444"> |- Зарубежная Поп музыка (собственные оцифровки)&nbsp;</option>
+<option id="fs-239" value="239"> |- Отечественная Поп музыка (собственные оцифровки)&nbsp;</option>
+<option id="fs-1163" value="1163"> |- Многоканальная музыка (Поп музыка)&nbsp;</option>
+<option id="fs-1885" value="1885"> |- Зарубежная Поп музыка (Hi-Res stereo)&nbsp;</option>
+
+<option id="fs-1125" value="1125" class="root_forum has_sf">Фольклор, Народная и Этническая музыка&nbsp;</option>
+<option id="fs-1130" value="1130"> |- Восточноевропейский фолк (mp3)&nbsp;</option>
+<option id="fs-1131" value="1131"> |- Восточноевропейский фолк (lossless)&nbsp;</option>
+<option id="fs-1132" value="1132"> |- Западноевропейский фолк (mp3)&nbsp;</option>
+<option id="fs-1133" value="1133"> |- Западноевропейский фолк (lossless)&nbsp;</option>
+<option id="fs-2084" value="2084"> |- Klezmer и Еврейский фольклор (lossy и lossless)&nbsp;</option>
+
+<option id="fs-1128" value="1128"> |- Этническая музыка Сибири, Средней и Восточной Азии (mp3)&nbsp;</option>
+<option id="fs-1129" value="1129"> |- Этническая музыка Сибири, Средней и Восточной Азии (loss..&nbsp;</option>
+<option id="fs-1856" value="1856"> |- Этническая музыка Индии (lossy и lossless)&nbsp;</option>
+<option id="fs-1283" value="1283"> |- Этническая музыка Африки и Ближнего Востока (mp3)&nbsp;</option>
+<option id="fs-2085" value="2085"> |- Этническая музыка Африки и Ближнего Востока (lossless)&nbsp;</option>
+<option id="fs-1282" value="1282"> |- Этническая музыка Кавказа и Закавказья (lossy и lossless..&nbsp;</option>
+
+<option id="fs-1284" value="1284"> |- Этническая музыка Северной и Южной Америки (mp3)&nbsp;</option>
+<option id="fs-1285" value="1285"> |- Этническая музыка Северной и Южной Америки (lossless)&nbsp;</option>
+<option id="fs-1138" value="1138"> |- Этническая музыка Австралии, островов Тихого и Индийског..&nbsp;</option>
+<option id="fs-1136" value="1136"> |- Country, Bluegrass (mp3)&nbsp;</option>
+<option id="fs-1137" value="1137"> |- Country, Bluegrass (lossless)&nbsp;</option>
+<option id="fs-1141" value="1141"> |- Folk, NewAge и Flamenco (Видео)&nbsp;</option>
+
+<option id="fs-1142" value="1142"> |- Folk, NewAge и Flamenco (DVD Video)&nbsp;</option>
+<option id="fs-1849" value="1849" class="root_forum has_sf">New Age, Relax, Meditative &amp; Flamenco&nbsp;</option>
+<option id="fs-1126" value="1126"> |- NewAge &amp; Meditative (mp3)&nbsp;</option>
+<option id="fs-1127" value="1127"> |- NewAge &amp; Meditative (lossless)&nbsp;</option>
+
+<option id="fs-1134" value="1134"> |- Фламенко и акустическая гитара (mp3)&nbsp;</option>
+<option id="fs-1135" value="1135"> |- Фламенко и акустическая гитара (lossless)&nbsp;</option>
+<option id="fs-855" value="855"> |- Звуки природы&nbsp;</option>
+<option id="fs-865" value="865"> |- Психоактивныe аудиопрограммы&nbsp;</option>
+<option id="fs-408" value="408" class="root_forum has_sf">Рэп, Хип-Хоп, R&#039;n&#039;B&nbsp;</option>
+<option id="fs-1397" value="1397"> |- Минусовки (Instrumentals)&nbsp;</option>
+
+<option id="fs-441" value="441"> |- Отечественный Рэп, Хип-Хоп&nbsp;</option>
+<option id="fs-1173" value="1173"> |- Отечественный R&#039;n&#039;B&nbsp;</option>
+<option id="fs-1486" value="1486"> |- Отечественный Рэп, Хип-Хоп, R&#039;n&#039;B (Lossless)&nbsp;</option>
+<option id="fs-1189" value="1189"> |- Отечественный Рэп, Хип-Хоп (Видео)&nbsp;</option>
+<option id="fs-1455" value="1455"> |- Отечественный R&#039;n&#039;B (Видео)&nbsp;</option>
+
+<option id="fs-446" value="446"> |- Зарубежный Рэп, Хип-Хоп&nbsp;</option>
+<option id="fs-1172" value="1172"> |- Зарубежный R&#039;n&#039;B&nbsp;</option>
+<option id="fs-909" value="909"> |- Зарубежный Рэп, Хип-Хоп (Lossless)&nbsp;</option>
+<option id="fs-1665" value="1665"> |- Зарубежный R&#039;n&#039;B (Lossless)&nbsp;</option>
+<option id="fs-442" value="442"> |- Зарубежный Рэп, Хип-Хоп (Видео)&nbsp;</option>
+
+<option id="fs-1174" value="1174"> |- Зарубежный R&#039;n&#039;B (Видео)&nbsp;</option>
+<option id="fs-1107" value="1107"> |- Рэп, Хип-Хоп, R&#039;n&#039;B (DVD Video)&nbsp;</option>
+<option id="fs-1760" value="1760" class="root_forum has_sf">Reggae, Ska, Dub&nbsp;</option>
+<option id="fs-1764" value="1764"> |- Jamaica Ska, Rocksteady, Early Reggae , Ska-Jazz, Tradit..&nbsp;</option>
+<option id="fs-1766" value="1766"> |- Punky-Reggae, Rocksteady-Punk, Ska Revival (mp3)&nbsp;</option>
+
+<option id="fs-1767" value="1767"> |- 3rd Wave Ska (mp3)&nbsp;</option>
+<option id="fs-1769" value="1769"> |- Ska-Punk, Ska-Core (mp3)&nbsp;</option>
+<option id="fs-1765" value="1765"> |- Reggae (mp3)&nbsp;</option>
+<option id="fs-1771" value="1771"> |- Dub (mp3)&nbsp;</option>
+<option id="fs-1770" value="1770"> |- Dancehall, Raggamuffin (mp3)&nbsp;</option>
+<option id="fs-1768" value="1768"> |- Reggae, Dancehall, Dub (lossless)&nbsp;</option>
+
+<option id="fs-1774" value="1774"> |- Ska, Ska-Punk, Ska-Jazz (lossless)&nbsp;</option>
+<option id="fs-1772" value="1772"> |- Отечественный реггей, даб&nbsp;</option>
+<option id="fs-1773" value="1773"> |- Отечественная ска-музыка&nbsp;</option>
+<option id="fs-1775" value="1775"> |- Reggae, Ska, Dub (Видео)&nbsp;</option>
+<option id="fs-1777" value="1777"> |- Reggae, Ska, Dub (DVD Video)&nbsp;</option>
+<option id="fs-416" value="416" class="root_forum has_sf">Саундтреки и Караоке&nbsp;</option>
+
+<option id="fs-782" value="782"> |- Караоке (аудио и видео)&nbsp;</option>
+<option id="fs-468" value="468"> |- Минусовки&nbsp;</option>
+<option id="fs-1625" value="1625"> |- Саундтреки (собственные оцифровки)&nbsp;</option>
+<option id="fs-691" value="691"> |- Саундтреки к отечественным фильмам (lossless)&nbsp;</option>
+<option id="fs-469" value="469"> |- Саундтреки к отечественным фильмам (mp3 и другие lossy-ф..&nbsp;</option>
+<option id="fs-786" value="786"> |- Саундтреки к зарубежным фильмам (lossless)&nbsp;</option>
+
+<option id="fs-785" value="785"> |- Саундтреки к зарубежным фильмам (mp3 и другие lossy-форм..&nbsp;</option>
+<option id="fs-796" value="796"> |- Неофициальные саундтреки к фильмам и сериалам (mp3 и дру..&nbsp;</option>
+<option id="fs-784" value="784"> |- Саундтреки к играм (lossless)&nbsp;</option>
+<option id="fs-783" value="783"> |- Саундтреки к играм (mp3 и другие lossy-форматы)&nbsp;</option>
+<option id="fs-1215" value="1215" class="root_forum has_sf">Шансон, Авторская и Военная песня&nbsp;</option>
+<option id="fs-1452" value="1452"> |- Зарубежный шансон (lossless)&nbsp;</option>
+
+<option id="fs-1219" value="1219"> |- Зарубежный шансон (mp3 и другие lossy-форматы)&nbsp;</option>
+<option id="fs-1220" value="1220"> |- Отечественный шансон (lossless)&nbsp;</option>
+<option id="fs-1221" value="1221"> |- Отечественный шансон (mp3 и другие lossy-форматы)&nbsp;</option>
+<option id="fs-1334" value="1334"> |- Сборники отечественного шансона (mp3 и другие lossy-форм..&nbsp;</option>
+<option id="fs-1216" value="1216"> |- Военная песня (lossless)&nbsp;</option>
+<option id="fs-1223" value="1223"> |- Военная песня (mp3 и другие lossy-форматы)&nbsp;</option>
+
+<option id="fs-1224" value="1224"> |- Авторская песня (lossless)&nbsp;</option>
+<option id="fs-1225" value="1225"> |- Авторская песня (mp3 и другие lossy-форматы)&nbsp;</option>
+<option id="fs-1226" value="1226"> |- Менестрели и ролевики (lossless, mp3 и другие lossy-форм..&nbsp;</option>
+<option id="fs-1217" value="1217"> |- Собственные оцифровки (Шансон и Авторская песня) lossles..&nbsp;</option>
+<option id="fs-1227" value="1227"> |- Видео (Шансон и Авторская песня)&nbsp;</option>
+<option id="fs-1228" value="1228"> |- DVD Видео (Шансон и Авторская песня)&nbsp;</option>
+
+<option id="fs-413" value="413" class="root_forum has_sf">Музыка других жанров&nbsp;</option>
+<option id="fs-974" value="974"> |- Собственные оцифровки (Музыка других жанров)&nbsp;</option>
+<option id="fs-315" value="315"> |- Музыкальные (HD Video)&nbsp;</option>
+<option id="fs-463" value="463"> |- Отечественная музыка других жанров (mp3)&nbsp;</option>
+<option id="fs-464" value="464"> |- Отечественная музыка других жанров (Lossless)&nbsp;</option>
+<option id="fs-1635" value="1635"> |- Советская эстрада, Ретро (mp3 и другие lossy-форматы)&nbsp;</option>
+
+<option id="fs-1634" value="1634"> |- Советская эстрада, Ретро (Lossless)&nbsp;</option>
+<option id="fs-466" value="466"> |- Зарубежная музыка других жанров (mp3)&nbsp;</option>
+<option id="fs-465" value="465"> |- Зарубежная музыка других жанров (Lossless)&nbsp;</option>
+<option id="fs-2018" value="2018"> |- Музыка для бальных танцев (lossless, mp3 и другие lossy-..&nbsp;</option>
+<option id="fs-1396" value="1396"> |- Православные песнопения (mp3)&nbsp;</option>
+<option id="fs-1395" value="1395"> |- Православные песнопения (lossless)&nbsp;</option>
+
+<option id="fs-1351" value="1351"> |- Сборники песен для детей&nbsp;</option>
+<option id="fs-475" value="475"> |- Видео (Музыка других жанров)&nbsp;</option>
+<option id="fs-988" value="988"> |- DVD Video (Музыка других жанров)&nbsp;</option>
+<option id="fs-880" value="880"> |- Мюзикл (lossless, mp3 и другие lossy-форматы вместе)&nbsp;</option>
+<option id="fs-655" value="655"> |- Мюзикл (Видео и DVD Video)&nbsp;</option>
+<option id="fs-965" value="965"> |- Неофициальные и внежанровые сборники (mp3 и другие lossy..&nbsp;</option>
+
+<option id="fs-919" value="919" class="root_forum has_sf">Ноты и Музыкальная литература&nbsp;</option>
+<option id="fs-944" value="944"> |- Академическая музыка (Ноты и Media CD)&nbsp;</option>
+<option id="fs-980" value="980"> |- Другие направления (Ноты, журналы, табулатуры)&nbsp;</option>
+<option id="fs-946" value="946"> |- Самоучители и Школы&nbsp;</option>
+<option id="fs-977" value="977"> |- Песенники (Songbooks)&nbsp;</option>
+<option id="fs-2074" value="2074"> |- Музыкальная литература и Теория&nbsp;</option>
+
+</optgroup>
+<optgroup label="&nbsp;Рок-музыка">
+<option id="fs-1698" value="1698" class="root_forum has_sf">Зарубежный Rock&nbsp;</option>
+<option id="fs-1702" value="1702"> |- Classic Rock &amp; Hard Rock (lossless)&nbsp;</option>
+<option id="fs-1703" value="1703"> |- Classic Rock &amp; Hard Rock (mp3)&nbsp;</option>
+<option id="fs-1704" value="1704"> |- Progressive &amp; Art-Rock (lossless)&nbsp;</option>
+
+<option id="fs-1705" value="1705"> |- Progressive &amp; Art-Rock (mp3)&nbsp;</option>
+<option id="fs-1706" value="1706"> |- Folk-Rock (lossless)&nbsp;</option>
+<option id="fs-1707" value="1707"> |- Folk-Rock (mp3)&nbsp;</option>
+<option id="fs-1708" value="1708"> |- Pop-Rock &amp; Soft Rock (lossless)&nbsp;</option>
+<option id="fs-1709" value="1709"> |- Pop-Rock &amp; Soft Rock (mp3)&nbsp;</option>
+
+<option id="fs-1710" value="1710"> |- Instrumental Guitar Rock (lossless)&nbsp;</option>
+<option id="fs-1711" value="1711"> |- Instrumental Guitar Rock (mp3)&nbsp;</option>
+<option id="fs-1712" value="1712"> |- Rockabilly, Psychobilly, Rock&#039;n&#039;Roll (lossless)&nbsp;</option>
+<option id="fs-1713" value="1713"> |- Rockabilly, Psychobilly, Rock&#039;n&#039;Roll (mp3)&nbsp;</option>
+<option id="fs-1714" value="1714"> |- Восточноазиатский рок (lossless)&nbsp;</option>
+
+<option id="fs-1715" value="1715"> |- Восточноазиатский рок (mp3)&nbsp;</option>
+<option id="fs-1716" value="1716" class="root_forum has_sf">Зарубежный Metal&nbsp;</option>
+<option id="fs-1796" value="1796"> |- Avant-garde, Experimental Metal (lossless)&nbsp;</option>
+<option id="fs-1797" value="1797"> |- Avant-garde, Experimental Metal (mp3)&nbsp;</option>
+<option id="fs-1719" value="1719"> |- Black (lossless)&nbsp;</option>
+<option id="fs-1778" value="1778"> |- Black (mp3)&nbsp;</option>
+
+<option id="fs-1779" value="1779"> |- Death, Doom, Sludge, Stoner (lossless)&nbsp;</option>
+<option id="fs-1780" value="1780"> |- Death, Doom, Sludge, Stoner (mp3)&nbsp;</option>
+<option id="fs-1720" value="1720"> |- Folk, Pagan, Viking (lossless)&nbsp;</option>
+<option id="fs-798" value="798"> |- Folk, Pagan, Viking (mp3)&nbsp;</option>
+<option id="fs-1724" value="1724"> |- Gothic Metal (lossless)&nbsp;</option>
+<option id="fs-1725" value="1725"> |- Gothic Metal (mp3)&nbsp;</option>
+
+<option id="fs-1730" value="1730"> |- Grind, Brutal Death (lossless)&nbsp;</option>
+<option id="fs-1731" value="1731"> |- Grind, Brutal Death (mp3)&nbsp;</option>
+<option id="fs-1726" value="1726"> |- Heavy, Power, Progressive (lossless)&nbsp;</option>
+<option id="fs-1727" value="1727"> |- Heavy, Power, Progressive (mp3)&nbsp;</option>
+<option id="fs-1815" value="1815"> |- Metalcore, Deathcore, Mathcore (lossless)&nbsp;</option>
+<option id="fs-1816" value="1816"> |- Metalcore, Deathcore, Mathcore (mp3)&nbsp;</option>
+
+<option id="fs-1728" value="1728"> |- Thrash, Speed (lossless)&nbsp;</option>
+<option id="fs-1729" value="1729"> |- Thrash, Speed (mp3)&nbsp;</option>
+<option id="fs-1732" value="1732" class="root_forum has_sf">Зарубежные Alternative, Punk, Independent&nbsp;</option>
+<option id="fs-1736" value="1736"> |- Alternative &amp; Nu-metal (lossless)&nbsp;</option>
+<option id="fs-1737" value="1737"> |- Alternative &amp; Nu-metal (mp3)&nbsp;</option>
+
+<option id="fs-1738" value="1738"> |- Punk (lossless)&nbsp;</option>
+<option id="fs-1739" value="1739"> |- Punk (mp3)&nbsp;</option>
+<option id="fs-1740" value="1740"> |- Hardcore (lossless)&nbsp;</option>
+<option id="fs-1741" value="1741"> |- Hardcore (mp3)&nbsp;</option>
+<option id="fs-1742" value="1742"> |- Indie, Post-Rock &amp; Post-Punk (lossless)&nbsp;</option>
+
+<option id="fs-1743" value="1743"> |- Indie, Post-Rock &amp; Post-Punk (mp3)&nbsp;</option>
+<option id="fs-1744" value="1744"> |- Industrial &amp; Post-industrial (lossless)&nbsp;</option>
+<option id="fs-1745" value="1745"> |- Industrial &amp; Post-industrial (mp3)&nbsp;</option>
+<option id="fs-1746" value="1746"> |- Emocore, Post-hardcore (lossless)&nbsp;</option>
+
+<option id="fs-1747" value="1747"> |- Emocore, Post-hardcore (mp3)&nbsp;</option>
+<option id="fs-1748" value="1748"> |- Gothic Rock &amp; Dark Folk (lossless)&nbsp;</option>
+<option id="fs-1749" value="1749"> |- Gothic Rock &amp; Dark Folk (mp3)&nbsp;</option>
+<option id="fs-722" value="722" class="root_forum has_sf">Отечественный Рок&nbsp;</option>
+<option id="fs-737" value="737"> |- Рок, Панк, Альтернатива (lossless)&nbsp;</option>
+
+<option id="fs-738" value="738"> |- Рок, Панк, Альтернатива (mp3)&nbsp;</option>
+<option id="fs-739" value="739"> |- Металл (lossless)&nbsp;</option>
+<option id="fs-740" value="740"> |- Металл (mp3)&nbsp;</option>
+<option id="fs-951" value="951"> |- Рок на языках народов xUSSR (lossless)&nbsp;</option>
+<option id="fs-952" value="952"> |- Рок на языках народов xUSSR (mp3)&nbsp;</option>
+<option id="fs-1752" value="1752" class="root_forum has_sf">Многоканальная музыка и собственные оцифровки (Рок)&nbsp;</option>
+
+<option id="fs-1756" value="1756"> |- Зарубежный рок (собственные оцифровки)&nbsp;</option>
+<option id="fs-1758" value="1758"> |- Отечественный рок (собственные оцифровки)&nbsp;</option>
+<option id="fs-1757" value="1757"> |- Зарубежный и отечественный рок (многоканальная музыка)&nbsp;</option>
+<option id="fs-1755" value="1755"> |- Зарубежный рок (Hi-Res stereo)&nbsp;</option>
+<option id="fs-453" value="453"> |- Конверсии Quadraphonic (многоканальная музыка)&nbsp;</option>
+<option id="fs-1170" value="1170"> |- Конверсии SACD (многоканальная музыка)&nbsp;</option>
+
+<option id="fs-1759" value="1759"> |- Конверсии в Blu-Ray (многоканальная музыка)&nbsp;</option>
+<option id="fs-1852" value="1852"> |- Апмиксы-Upmixes/Даунмиксы-Downmix (многоканальная и Hi-R..&nbsp;</option>
+<option id="fs-1781" value="1781" class="root_forum has_sf">Видео, DVD Video, HD Video (Рок-музыка)&nbsp;</option>
+<option id="fs-1782" value="1782"> |- Rock (Видео)&nbsp;</option>
+<option id="fs-1783" value="1783"> |- Rock (DVD Video)&nbsp;</option>
+<option id="fs-1787" value="1787"> |- Metal (Видео)&nbsp;</option>
+
+<option id="fs-1788" value="1788"> |- Metal (DVD Video)&nbsp;</option>
+<option id="fs-1789" value="1789"> |- Alternative, Punk, Independent (Видео)&nbsp;</option>
+<option id="fs-1790" value="1790"> |- Alternative, Punk, Independent (DVD Video)&nbsp;</option>
+<option id="fs-1791" value="1791"> |- Отечественный Рок, Панк, Альтернатива (Видео)&nbsp;</option>
+<option id="fs-1792" value="1792"> |- Отечественный Рок, Панк, Альтернатива (DVD Video)&nbsp;</option>
+<option id="fs-1793" value="1793"> |- Отечественный Металл (Видео)&nbsp;</option>
+
+<option id="fs-1794" value="1794"> |- Отечественный Металл (DVD Video)&nbsp;</option>
+<option id="fs-1795" value="1795"> |- Рок-музыка (HD Video)&nbsp;</option>
+</optgroup>
+<optgroup label="&nbsp;Электронная музыка">
+<option id="fs-1821" value="1821" class="root_forum has_sf">Trance, Goa Trance, Psy-Trance, PsyChill, Ambient Dub&nbsp;</option>
+<option id="fs-1844" value="1844"> |- Goa Trance, Psy-Trance (Lossless)&nbsp;</option>
+<option id="fs-1822" value="1822"> |- Goa Trance, Psy-Trance (mp3)&nbsp;</option>
+<option id="fs-1894" value="1894"> |- PsyChill, Ambient Dub (Lossless)&nbsp;</option>
+
+<option id="fs-1895" value="1895"> |- PsyChill, Ambient Dub (mp3)&nbsp;</option>
+<option id="fs-460" value="460"> |- Goa Trance, Psy-Trance, PsyChill, Ambient Dub (Promo, Li..&nbsp;</option>
+<option id="fs-1818" value="1818"> |- Trance (Lossless)&nbsp;</option>
+<option id="fs-1819" value="1819"> |- Trance (mp3)&nbsp;</option>
+<option id="fs-1847" value="1847"> |- Trance (Singles, EPs) (mp3)&nbsp;</option>
+<option id="fs-1824" value="1824"> |- Trance (Radioshows, Podcasts, Live Sets, Mixes) (mp3)&nbsp;</option>
+
+<option id="fs-1807" value="1807" class="root_forum has_sf">House, Techno, Hardcore, Hardstyle, Jumpstyle&nbsp;</option>
+<option id="fs-1829" value="1829"> |- Hardcore, Hardstyle, Jumpstyle (Lossless)&nbsp;</option>
+<option id="fs-1830" value="1830"> |- Hardcore, Hardstyle, Jumpstyle (mp3)&nbsp;</option>
+<option id="fs-1831" value="1831"> |- Hardcore, Hardstyle, Jumpstyle (Vinyl)&nbsp;</option>
+<option id="fs-1857" value="1857"> |- House (Lossless)&nbsp;</option>
+<option id="fs-1859" value="1859"> |- House (Radioshow, Podcast, Liveset, Mixes)&nbsp;</option>
+
+<option id="fs-1858" value="1858"> |- House (mp3)&nbsp;</option>
+<option id="fs-840" value="840"> |- House (Проморелизы, сборники)&nbsp;</option>
+<option id="fs-1860" value="1860"> |- House (Singles, EPs) mp3&nbsp;</option>
+<option id="fs-1825" value="1825"> |- Techno (Lossless)&nbsp;</option>
+<option id="fs-1826" value="1826"> |- Techno (mp3)&nbsp;</option>
+<option id="fs-1827" value="1827"> |- Techno (Radioshows, Podcasts, Livesets, Mixes)&nbsp;</option>
+
+<option id="fs-1828" value="1828"> |- Techno (Singles, EPs) mp3&nbsp;</option>
+<option id="fs-1808" value="1808" class="root_forum has_sf">Drum &amp; Bass, Jungle, Breakbeat, Dubstep, IDM, Electro&nbsp;</option>
+<option id="fs-797" value="797"> |- Electro, Electro-Freestyle, Nu Electro (lossless)&nbsp;</option>
+<option id="fs-1805" value="1805"> |- Electro, Electro-Freestyle, Nu Electro (mp3)&nbsp;</option>
+<option id="fs-1648" value="1648"> |- Drum &amp; Bass, Breakbeat, Dubstep (Scene Packs)&nbsp;</option>
+
+<option id="fs-1832" value="1832"> |- Drum &amp; Bass, Jungle (Lossless)&nbsp;</option>
+<option id="fs-1833" value="1833"> |- Drum &amp; Bass, Jungle (Albums [LPs], VAs) (mp3)&nbsp;</option>
+<option id="fs-1834" value="1834"> |- Drum &amp; Bass, Jungle (Radioshows, Podcasts, Livesets, Mix..&nbsp;</option>
+<option id="fs-1835" value="1835"> |- Drum &amp; Bass, Jungle (Singles, EPs)&nbsp;</option>
+
+<option id="fs-1893" value="1893"> |- Drum &amp; Bass, Jungle (Discography, Label packs)&nbsp;</option>
+<option id="fs-1836" value="1836"> |- Breakbeat, Dubstep (Lossless)&nbsp;</option>
+<option id="fs-1837" value="1837"> |- Breakbeat, Dubstep (mp3)&nbsp;</option>
+<option id="fs-1838" value="1838"> |- Breakbeat, Dubstep (Radioshows, Podcasts, Livesets, Mixe..&nbsp;</option>
+<option id="fs-1839" value="1839"> |- Breakbeat, Dubstep (Singles, EPs)&nbsp;</option>
+
+<option id="fs-1840" value="1840"> |- IDM (Lossless)&nbsp;</option>
+<option id="fs-1841" value="1841"> |- IDM (mp3)&nbsp;</option>
+<option id="fs-1842" value="1842"> |- IDM (Radioshow, Podcast, Liveset, Mixes)&nbsp;</option>
+<option id="fs-1809" value="1809" class="root_forum has_sf">Chillout, Lounge, Downtempo, Trip-Hop&nbsp;</option>
+<option id="fs-1861" value="1861"> |- Chillout, Lounge, Downtempo (Lossless)&nbsp;</option>
+<option id="fs-1862" value="1862"> |- Chillout, Lounge, Downtempo (mp3)&nbsp;</option>
+
+<option id="fs-1947" value="1947"> |- Nu Jazz, Acid Jazz, Future Jazz (Lossless)&nbsp;</option>
+<option id="fs-1946" value="1946"> |- Nu Jazz, Acid Jazz, Future Jazz (mp3)&nbsp;</option>
+<option id="fs-1945" value="1945"> |- Trip Hop, Abstract Hip-Hop (Lossless)&nbsp;</option>
+<option id="fs-1944" value="1944"> |- Trip Hop, Abstract Hip-Hop (mp3)&nbsp;</option>
+<option id="fs-1810" value="1810" class="root_forum has_sf">Traditional Electronic, Ambient, Experimental&nbsp;</option>
+<option id="fs-1869" value="1869"> |- Experimental (Lossless)&nbsp;</option>
+
+<option id="fs-1873" value="1873"> |- Experimental (mp3)&nbsp;</option>
+<option id="fs-1871" value="1871"> |- Modern Classical, Electroacoustic (lossless)&nbsp;</option>
+<option id="fs-1867" value="1867"> |- Modern Classical, Electroacoustic (mp3)&nbsp;</option>
+<option id="fs-1864" value="1864"> |- Traditional Electronic, Ambient (Lossless)&nbsp;</option>
+<option id="fs-1865" value="1865"> |- Traditional Electronic, Ambient (mp3)&nbsp;</option>
+<option id="fs-1866" value="1866"> |- Traditional Electronic, Ambient (Radioshows, Podcasts, L..&nbsp;</option>
+
+<option id="fs-1811" value="1811" class="root_forum has_sf">Industrial, Noise, EBM, Dark Electro, Aggrotech, Synthpop, N..&nbsp;</option>
+<option id="fs-1868" value="1868"> |- EBM, Dark Electro, Aggrotech (Lossless)&nbsp;</option>
+<option id="fs-1875" value="1875"> |- EBM, Dark Electro, Aggrotech (mp3)&nbsp;</option>
+<option id="fs-1877" value="1877"> |- Industrial, Noise (Lossless)&nbsp;</option>
+<option id="fs-1878" value="1878"> |- Industrial, Noise (mp3)&nbsp;</option>
+<option id="fs-1880" value="1880"> |- Synthpop, New Wave (Lossless)&nbsp;</option>
+
+<option id="fs-1881" value="1881"> |- Synthpop, New Wave (mp3)&nbsp;</option>
+<option id="fs-1812" value="1812" class="root_forum has_sf">Электронная музыка (Видео, DVD Video/Audio, HD Video, DTS, S..&nbsp;</option>
+<option id="fs-1886" value="1886"> |- Электронная музыка (Официальные DVD Video)&nbsp;</option>
+<option id="fs-1887" value="1887"> |- Электронная музыка  (Неофициальные, любительские DVD Vid..&nbsp;</option>
+<option id="fs-1912" value="1912"> |- Электронная музыка (Видео)&nbsp;</option>
+<option id="fs-1913" value="1913"> |- Электронная музыка (HD Video)&nbsp;</option>
+
+<option id="fs-1890" value="1890"> |- Многоканальная музыка (Электроника, NewAge &amp; Meditative)&nbsp;</option>
+<option id="fs-1754" value="1754"> |- Электронная музыка (собственные оцифровки)&nbsp;</option>
+</optgroup>
+<optgroup label="&nbsp;Игры">
+<option id="fs-5" value="5" class="root_forum has_sf">Игры для PC (раздачи)&nbsp;</option>
+<option id="fs-635" value="635"> |- Горячие Новинки&nbsp;</option>
+<option id="fs-139" value="139"> |- Прочее для игр&nbsp;</option>
+
+<option id="fs-959" value="959"> |- Демо-версии&nbsp;</option>
+<option id="fs-127" value="127"> |- Аркады&nbsp;</option>
+<option id="fs-53" value="53"> |- Приключения и квесты&nbsp;</option>
+<option id="fs-1008" value="1008"> |- Квесты в стиле &quot;Поиск предметов&quot;&nbsp;</option>
+<option id="fs-51" value="51"> |- Стратегии&nbsp;</option>
+<option id="fs-961" value="961"> |- Авиасимуляторы&nbsp;</option>
+
+<option id="fs-962" value="962"> |- Гонки&nbsp;</option>
+<option id="fs-54" value="54"> |- Другие симуляторы&nbsp;</option>
+<option id="fs-55" value="55"> |- Action&nbsp;</option>
+<option id="fs-52" value="52"> |- RPG&nbsp;</option>
+<option id="fs-900" value="900"> |- Аниме-игры&nbsp;</option>
+<option id="fs-246" value="246"> |- Эротические игры&nbsp;</option>
+
+<option id="fs-278" value="278"> |- Шахматы&nbsp;</option>
+<option id="fs-128" value="128"> |- Для самых маленьких&nbsp;</option>
+<option id="fs-240" value="240"> |- Игровое видео&nbsp;</option>
+<option id="fs-2067" value="2067"> |- Lineage II Movies&nbsp;</option>
+<option id="fs-2147" value="2147"> |- World of Warcraft Movies&nbsp;</option>
+<option id="fs-960" value="960"> |- Counter Strike Movies&nbsp;</option>
+
+<option id="fs-2115" value="2115" class="root_forum has_sf">Онлайн Игры&nbsp;</option>
+<option id="fs-2117" value="2117"> |- World of Warcraft&nbsp;</option>
+<option id="fs-2155" value="2155"> |- Lineage II&nbsp;</option>
+<option id="fs-2118" value="2118"> |- Прочие бесплатные&nbsp;</option>
+<option id="fs-2119" value="2119"> |- Прочие платные&nbsp;</option>
+<option id="fs-50" value="50"> |- Прочее для онлайн-игр&nbsp;</option>
+
+<option id="fs-2142" value="2142" class="root_forum has_sf">Microsoft Flight Simulator и аддоны для него&nbsp;</option>
+<option id="fs-2143" value="2143"> |- Сценарии, меши и аэропорты&nbsp;</option>
+<option id="fs-2145" value="2145"> |- Самолеты и вертолеты&nbsp;</option>
+<option id="fs-2146" value="2146"> |- Миссии, трафик, звуки, паки и утилиты&nbsp;</option>
+<option id="fs-637" value="637" class="root_forum has_sf">Старые Игры&nbsp;</option>
+<option id="fs-642" value="642"> |- Аркады и Логические игры (Старые игры)&nbsp;</option>
+<option id="fs-643" value="643"> |- Приключения и квесты (Старые игры)&nbsp;</option>
+
+<option id="fs-644" value="644"> |- Стратегии (Старые игры)&nbsp;</option>
+<option id="fs-645" value="645"> |- Прочие симуляторы (Старые Игры)&nbsp;</option>
+<option id="fs-646" value="646"> |- Action (Старые игры)&nbsp;</option>
+<option id="fs-647" value="647"> |- RPG (Старые игры)&nbsp;</option>
+<option id="fs-649" value="649"> |- Эротические игры (Старые игры)&nbsp;</option>
+<option id="fs-1098" value="1098"> |- Сборники Игр (Старые Игры)&nbsp;</option>
+
+<option id="fs-650" value="650"> |- Для самых маленьких (Старые Игры)&nbsp;</option>
+<option id="fs-548" value="548" class="root_forum has_sf">Игры для консолей&nbsp;</option>
+<option id="fs-129" value="129"> |- Портативные и Консольные (Игры)&nbsp;</option>
+<option id="fs-908" value="908"> |- PS&nbsp;</option>
+<option id="fs-357" value="357"> |- PS2&nbsp;</option>
+<option id="fs-510" value="510"> |- Xbox 360&nbsp;</option>
+
+<option id="fs-887" value="887"> |- Xbox&nbsp;</option>
+<option id="fs-1116" value="1116"> |- Игры PS1 для PSP&nbsp;</option>
+<option id="fs-973" value="973"> |- Программы для PSP (Homebrew)&nbsp;</option>
+<option id="fs-773" value="773"> |- Wii&nbsp;</option>
+<option id="fs-774" value="774"> |- NDS&nbsp;</option>
+<option id="fs-968" value="968"> |- Dreamcast&nbsp;</option>
+
+<option id="fs-546" value="546"> |- Игры для DVD плеера&nbsp;</option>
+<option id="fs-700" value="700"> |- Видео для PSP&nbsp;</option>
+<option id="fs-1926" value="1926"> |- Видео для PS3 и других консолей&nbsp;</option>
+</optgroup>
+<optgroup label="&nbsp;Программы и Дизайн">
+<option id="fs-1012" value="1012" class="root_forum has_sf">Операционные системы от Microsoft&nbsp;</option>
+<option id="fs-1019" value="1019"> |- Настольные ОС от Microsoft (выпущенные до Windows XP)&nbsp;</option>
+<option id="fs-2153" value="2153"> |- Настольные ОС от Microsoft (начиная с Windows XP)&nbsp;</option>
+
+<option id="fs-1021" value="1021"> |- Серверные ОС от Microsoft&nbsp;</option>
+<option id="fs-1025" value="1025"> |- Разное (Операционные системы от Microsoft)&nbsp;</option>
+<option id="fs-1376" value="1376" class="root_forum has_sf">Linux, Unix и другие ОС&nbsp;</option>
+<option id="fs-1379" value="1379"> |- Операционные системы (Linux, Unix)&nbsp;</option>
+<option id="fs-1381" value="1381"> |- Программное обеспечение (Linux, Unix)&nbsp;</option>
+<option id="fs-899" value="899"> |- Игры для Linux&nbsp;</option>
+
+<option id="fs-1473" value="1473"> |- Другие ОС и ПО под них&nbsp;</option>
+<option id="fs-1195" value="1195" class="root_forum">Тестовые диски для настройки аудио/видео аппаратуры&nbsp;</option>
+<option id="fs-1013" value="1013" class="root_forum has_sf">Системные программы&nbsp;</option>
+<option id="fs-1028" value="1028"> |- Работа с жёстким диском&nbsp;</option>
+<option id="fs-1029" value="1029"> |- Резервное копирование&nbsp;</option>
+<option id="fs-1030" value="1030"> |- Архиваторы и файловые менеджеры&nbsp;</option>
+<option id="fs-1031" value="1031"> |- Программы для настройки и оптимизации ОС&nbsp;</option>
+
+<option id="fs-1032" value="1032"> |- Сервисное обслуживание компьютера&nbsp;</option>
+<option id="fs-1033" value="1033"> |- Работа с носителями информации&nbsp;</option>
+<option id="fs-1034" value="1034"> |- Информация и диагностика&nbsp;</option>
+<option id="fs-1066" value="1066"> |- Программы для интернет и сетей&nbsp;</option>
+<option id="fs-1035" value="1035"> |- ПО для защиты компьютера (Антивирусное ПО, Фаерволлы)&nbsp;</option>
+<option id="fs-1038" value="1038"> |- Анти-шпионы и анти-трояны&nbsp;</option>
+
+<option id="fs-1039" value="1039"> |- Программы для защиты информации&nbsp;</option>
+<option id="fs-1536" value="1536"> |- Драйверы и прошивки&nbsp;</option>
+<option id="fs-1051" value="1051"> |- Оригинальные диски к компьютерам и комплектующим&nbsp;</option>
+<option id="fs-1040" value="1040"> |- Серверное ПО для Windows&nbsp;</option>
+<option id="fs-1041" value="1041"> |- Изменение интерфейса ОС Windows&nbsp;</option>
+<option id="fs-1636" value="1636"> |- Скринсейверы&nbsp;</option>
+
+<option id="fs-1042" value="1042"> |- Разное (Системные программы под Windows)&nbsp;</option>
+<option id="fs-1014" value="1014" class="root_forum has_sf">Системы для бизнеса, офиса, научной и проектной работы&nbsp;</option>
+<option id="fs-1060" value="1060"> |- Всё для дома: кройка, шитьё, кулинария&nbsp;</option>
+<option id="fs-1061" value="1061"> |- Офисные системы&nbsp;</option>
+<option id="fs-1062" value="1062"> |- Системы для бизнеса&nbsp;</option>
+<option id="fs-1067" value="1067"> |- Распознавание текста, звука и синтез речи&nbsp;</option>
+
+<option id="fs-1086" value="1086"> |- Работа с PDF и DjVu&nbsp;</option>
+<option id="fs-1068" value="1068"> |- Словари, переводчики&nbsp;</option>
+<option id="fs-1063" value="1063"> |- Системы для научной работы&nbsp;</option>
+<option id="fs-1087" value="1087"> |- САПР (общие и машиностроительные)&nbsp;</option>
+<option id="fs-1192" value="1192"> |- САПР (электроника, автоматика, ГАП)&nbsp;</option>
+<option id="fs-1088" value="1088"> |- Программы для архитекторов и строителей&nbsp;</option>
+
+<option id="fs-1193" value="1193"> |- Библиотеки и проекты для архитекторов и дизайнеров интер..&nbsp;</option>
+<option id="fs-1071" value="1071"> |- Прочие справочные системы&nbsp;</option>
+<option id="fs-1073" value="1073"> |- Разное (Системы для бизнеса, офиса, научной и проектной ..&nbsp;</option>
+<option id="fs-1052" value="1052" class="root_forum has_sf">Веб-разработка и Программирование&nbsp;</option>
+<option id="fs-1053" value="1053"> |- WYSIWYG Редакторы для веб-диза&nbsp;</option>
+<option id="fs-1054" value="1054"> |- Текстовые редакторы с подсветкой&nbsp;</option>
+
+<option id="fs-1055" value="1055"> |- Среды программирования, компиляторы и вспомогательные пр..&nbsp;</option>
+<option id="fs-1056" value="1056"> |- Компоненты для сред программирования&nbsp;</option>
+<option id="fs-2077" value="2077"> |- Системы управления базами данных&nbsp;</option>
+<option id="fs-1057" value="1057"> |- Скрипты и движки сайтов, CMS а также расширения к ним&nbsp;</option>
+<option id="fs-1018" value="1018"> |- Шаблоны для сайтов и CMS&nbsp;</option>
+<option id="fs-1058" value="1058"> |- Разное (Веб-разработка и программирование)&nbsp;</option>
+
+<option id="fs-1016" value="1016" class="root_forum has_sf">Программы для работы с мультимедиа и 3D&nbsp;</option>
+<option id="fs-1079" value="1079"> |- Программные комплекты&nbsp;</option>
+<option id="fs-1080" value="1080"> |- Плагины для программ компании Adobe&nbsp;</option>
+<option id="fs-1081" value="1081"> |- Графические редакторы&nbsp;</option>
+<option id="fs-1082" value="1082"> |- Программы для верстки, печати и работы со шрифтами&nbsp;</option>
+<option id="fs-1083" value="1083"> |- 3D моделирование, рендеринг и плагины для них&nbsp;</option>
+
+<option id="fs-1084" value="1084"> |- Анимация&nbsp;</option>
+<option id="fs-1085" value="1085"> |- Создание BD/HD/DVD-видео&nbsp;</option>
+<option id="fs-1089" value="1089"> |- Редакторы видео&nbsp;</option>
+<option id="fs-1090" value="1090"> |- Видео- Аудио- конверторы&nbsp;</option>
+<option id="fs-1065" value="1065"> |- Аудио- и видео-, CD- проигрыватели и каталогизаторы&nbsp;</option>
+<option id="fs-1064" value="1064"> |- Каталогизаторы и просмотрщики графики&nbsp;</option>
+
+<option id="fs-1092" value="1092"> |- Разное (Программы для работы с мультимедиа и 3D)&nbsp;</option>
+<option id="fs-1204" value="1204"> |- Виртуальные студии, секвенсоры и аудиоредакторы&nbsp;</option>
+<option id="fs-1027" value="1027"> |- Виртуальные инструменты и синтезаторы&nbsp;</option>
+<option id="fs-1199" value="1199"> |- Плагины для обработки звука&nbsp;</option>
+<option id="fs-1091" value="1091"> |- Разное (Программы для работы со звуком)&nbsp;</option>
+<option id="fs-828" value="828" class="root_forum has_sf">Материалы для мультимедиа и дизайна&nbsp;</option>
+
+<option id="fs-1357" value="1357"> |- Авторские работы&nbsp;</option>
+<option id="fs-890" value="890"> |- Официальные сборники векторных клипартов&nbsp;</option>
+<option id="fs-830" value="830"> |- Прочие векторные клипарты&nbsp;</option>
+<option id="fs-1290" value="1290"> |- Photostoсks&nbsp;</option>
+<option id="fs-1962" value="1962"> |- Костюмы для фотомонтажа&nbsp;</option>
+<option id="fs-831" value="831"> |- Рамки и виньетки для оформления фотографий&nbsp;</option>
+
+<option id="fs-829" value="829"> |- Прочие растровые клипарты&nbsp;</option>
+<option id="fs-633" value="633"> |- 3D модели, сцены и материалы&nbsp;</option>
+<option id="fs-1009" value="1009"> |- Футажи&nbsp;</option>
+<option id="fs-1963" value="1963"> |- Прочие сборники футажей&nbsp;</option>
+<option id="fs-1954" value="1954"> |- Музыкальные библиотеки&nbsp;</option>
+<option id="fs-1010" value="1010"> |- Звуковые эффекты&nbsp;</option>
+
+<option id="fs-1674" value="1674"> |- Библиотеки сэмплов&nbsp;</option>
+<option id="fs-839" value="839"> |- Материалы для создания меню и обложек DVD&nbsp;</option>
+<option id="fs-1679" value="1679"> |- Стили, кисти, формы и узоры для Adobe Photoshop&nbsp;</option>
+<option id="fs-1011" value="1011"> |- Шрифты&nbsp;</option>
+<option id="fs-835" value="835"> |- Разное (Материалы для мультимедиа и дизайна)&nbsp;</option>
+<option id="fs-1503" value="1503" class="root_forum has_sf">ГИС, системы навигации и карты&nbsp;</option>
+
+<option id="fs-1507" value="1507"> |- ГИС (Геоинформационные системы)&nbsp;</option>
+<option id="fs-1526" value="1526"> |- Карты, снабженные программной оболочкой&nbsp;</option>
+<option id="fs-1508" value="1508"> |- Атласы и карты современные (после 1950 г.)&nbsp;</option>
+<option id="fs-1509" value="1509"> |- Атласы и карты старинные (до 1950 г.)&nbsp;</option>
+<option id="fs-1510" value="1510"> |- Карты прочие (астрономические, исторические, тематически..&nbsp;</option>
+<option id="fs-1511" value="1511"> |- Встроенная автомобильная навигация&nbsp;</option>
+
+<option id="fs-1512" value="1512"> |- Garmin&nbsp;</option>
+<option id="fs-1513" value="1513"> |- Ozi&nbsp;</option>
+<option id="fs-1514" value="1514"> |- TomTom&nbsp;</option>
+<option id="fs-1515" value="1515"> |- Navigon / Navitel&nbsp;</option>
+<option id="fs-1516" value="1516"> |- Igo&nbsp;</option>
+<option id="fs-1517" value="1517"> |- Разное - системы навигации и карты&nbsp;</option>
+
+</optgroup>
+<optgroup label="&nbsp;Мобильные устройства">
+<option id="fs-285" value="285" class="root_forum has_sf">Игры, приложения и пр. для мобильных устройств&nbsp;</option>
+<option id="fs-290" value="290"> |- Приложения для Windows Mobile&nbsp;</option>
+<option id="fs-2154" value="2154"> |- Приложения для Android OS, Palm OS, BlackBerry и пр.&nbsp;</option>
+<option id="fs-1002" value="1002"> |- Игры для Windows Mobile&nbsp;</option>
+<option id="fs-2149" value="2149"> |- Игры для Android OS, Palm OS, BlackBerry и пр.&nbsp;</option>
+<option id="fs-1001" value="1001"> |- Игры для Java&nbsp;</option>
+
+<option id="fs-1004" value="1004"> |- Игры для Symbian&nbsp;</option>
+<option id="fs-1005" value="1005"> |- Приложения для Java&nbsp;</option>
+<option id="fs-289" value="289"> |- Приложения для Symbian&nbsp;</option>
+<option id="fs-288" value="288"> |- Софт для работы с телефоном&nbsp;</option>
+<option id="fs-291" value="291"> |- Обои и темы&nbsp;</option>
+<option id="fs-292" value="292"> |- Аудио/видео конвертеры в мобильные форматы&nbsp;</option>
+
+<option id="fs-957" value="957" class="root_forum has_sf">Видео для мобильных устройств&nbsp;</option>
+<option id="fs-287" value="287"> |- Видео для смартфонов и КПК&nbsp;</option>
+<option id="fs-286" value="286"> |- Видео для мобильных (3GP)&nbsp;</option>
+</optgroup>
+<optgroup label="&nbsp;Apple">
+<option id="fs-1366" value="1366" class="root_forum has_sf">Apple Macintosh&nbsp;</option>
+<option id="fs-1368" value="1368"> |- Mac OS (для Macintosh)&nbsp;</option>
+<option id="fs-1383" value="1383"> |- Mac OS (для РС-Хакинтош)&nbsp;</option>
+
+<option id="fs-537" value="537"> |- Игры Mac OS (Macintosh)&nbsp;</option>
+<option id="fs-1394" value="1394"> |- Программы для просмотра и обработки видео Mac OS&nbsp;</option>
+<option id="fs-1370" value="1370"> |- Программы для создания и обработки графики Mac OS&nbsp;</option>
+<option id="fs-1372" value="1372"> |- Аудио редакторы и конверторы для Mac OS&nbsp;</option>
+<option id="fs-1373" value="1373"> |- Системные программы для Mac OS&nbsp;</option>
+<option id="fs-1374" value="1374"> |- Другие программы для Mac OS&nbsp;</option>
+
+<option id="fs-1933" value="1933" class="root_forum has_sf">iPhone, iPod, iPod Touch, iPad&nbsp;</option>
+<option id="fs-1909" value="1909"> |- Аудиокниги (iPhone, iPod, iPod Touch)&nbsp;</option>
+<option id="fs-1937" value="1937"> |- Разное (iPhone, iPod, iPod Touch)&nbsp;</option>
+<option id="fs-1935" value="1935"> |- Программы (iPhone, iPad, iPod Touch)&nbsp;</option>
+<option id="fs-1003" value="1003"> |- Игры (iPhone, iPad, iPod Touch)&nbsp;</option>
+<option id="fs-1908" value="1908"> |- Видео (iPhone, iPod Touch)&nbsp;</option>
+
+<option id="fs-2082" value="2082"> |- Видео (iPod Classic, Video, Nano)&nbsp;</option>
+<option id="fs-1936" value="1936"> |- HD Видео (Apple TV, iPad)&nbsp;</option>
+<option id="fs-1927" value="1927"> |- Музыка lossless (iPod, iPhone, iPad)&nbsp;</option>
+</optgroup>
+<optgroup label="&nbsp;Медицина и здоровье">
+<option id="fs-2125" value="2125" class="root_forum has_sf">Книги, журналы и программы&nbsp;</option>
+<option id="fs-2130" value="2130"> |- Клиническая медицина  после 1990 г.&nbsp;</option>
+<option id="fs-2129" value="2129"> |- Профилактическая медицина и диагностика&nbsp;</option>
+
+<option id="fs-2141" value="2141"> |- Медико-биологические науки/Фармацевтические науки&nbsp;</option>
+<option id="fs-2131" value="2131"> |- Ветеринария, разное&nbsp;</option>
+<option id="fs-2132" value="2132"> |- Нетрадиционная медицина и популярные книги о здоровье&nbsp;</option>
+<option id="fs-2133" value="2133"> |- Клиническая медицина до 1990 г.&nbsp;</option>
+<option id="fs-1350" value="1350"> |- Аудиокниги по медицине&nbsp;</option>
+<option id="fs-2134" value="2134"> |- Медицинский софт&nbsp;</option>
+
+<option id="fs-2126" value="2126" class="root_forum has_sf">Видеоуроки и документальные фильмы и телепередачи&nbsp;</option>
+<option id="fs-2135" value="2135"> |- Медицина и стоматология&nbsp;</option>
+<option id="fs-2140" value="2140"> |- Психотерапия и клиническая психология&nbsp;</option>
+<option id="fs-2136" value="2136"> |- Массаж&nbsp;</option>
+<option id="fs-2138" value="2138"> |- Здоровье&nbsp;</option>
+<option id="fs-2139" value="2139"> |- Документальные фильмы и телепередачи&nbsp;</option>
+
+</optgroup>
+<optgroup label="&nbsp;Разное">
+<option id="fs-10" value="10" class="root_forum has_sf">Разное&nbsp;</option>
+<option id="fs-1100" value="1100"> |- Аватары, Иконки, Смайлы&nbsp;</option>
+<option id="fs-1643" value="1643"> |- Живопись, Графика, Фэнтези арт&nbsp;</option>
+<option id="fs-848" value="848"> |- Картинки&nbsp;</option>
+<option id="fs-808" value="808"> |- Любительские фотографии&nbsp;</option>
+<option id="fs-630" value="630"> |- Обои&nbsp;</option>
+
+<option id="fs-1664" value="1664"> |- Фото знаменитостей&nbsp;</option>
+<option id="fs-148" value="148"> |- Аудио&nbsp;</option>
+<option id="fs-807" value="807"> |- Видео&nbsp;</option>
+<option id="fs-147" value="147"> |- Публикации и учебные материалы (тексты)&nbsp;</option>
+<option id="fs-1319" value="1319"> |- Спорт (видео)&nbsp;</option>
+<option id="fs-847" value="847"> |- Трейлеры и дополнительные материалы к фильмам&nbsp;</option>
+
+<option id="fs-1167" value="1167"> |- Любительские видеоклипы&nbsp;</option>
+<option id="fs-19" value="19" class="root_forum">Тестовый форум&nbsp;</option>
+</optgroup>
+<optgroup label="&nbsp;Обсуждения, встречи, общение">
+<option id="fs-321" value="321"> |- Отчеты о встречах&nbsp;</option>
+</optgroup>
+		</select>
+	</p>
+		<p id="fs-qs-div" class="med" style="display: none;"><input id="fs-qs-input" type="text" style="width: 200px;"> <i>фильтр по названию</i></p>
+
+		<p><img width="300" class="spacer" src="http://static.rutracker.org/templates/default/images/spacer.gif" alt="" /></p>
+</div>
+</fieldset>
+
+	</td>
+	<td height="1" width="20%">
+
+<fieldset>
+<legend>Упорядочить по</legend>
+<div class="med">
+	<p class="select">
+<select  name="o" id="o">
+
+		<option selected="selected"  value="1">&nbsp;Зарегистрирован&nbsp;</option>
+		<option value="2">&nbsp;Название темы&nbsp;</option>
+		<option value="4">&nbsp;Количество скачиваний&nbsp;</option>
+		<option value="10">&nbsp;Количество сидов&nbsp;</option>
+		<option value="11">&nbsp;Количество личей&nbsp;</option>
+		<option value="7">&nbsp;Размер&nbsp;</option>
+
+		<option value="8">&nbsp;Посл. сообщение&nbsp;</option>
+</select>
+</p>
+	<p class="radio"><label><input type="radio" name="s" value="1"  /> по возрастанию</label></p>
+	<p class="radio"><label><input type="radio" name="s" value="2"  checked="checked"  /> по убыванию</label></p>
+</div>
+</fieldset>
+<fieldset>
+<legend>Торренты за</legend>
+
+<div>
+	<p class="select dis-if-ts">
+<select  name="tm" id="tm">
+		<option selected="selected"  value="-1">&nbsp;за все время&nbsp;</option>
+		<option value="1">&nbsp;за сегодня&nbsp;</option>
+		<option value="3">&nbsp;последние 3 дня&nbsp;</option>
+		<option value="7">&nbsp;посл. неделю&nbsp;</option>
+		<option value="14">&nbsp;посл. 2 недели&nbsp;</option>
+
+		<option value="32">&nbsp;последний месяц&nbsp;</option>
+</select>
+</p>
+</div>
+</fieldset>
+
+	</td>
+	<td width="30%">
+
+<fieldset>
+<legend>Показывать только</legend>
+<div class="gen">
+
+	<p class="chbox dis-if-ts"><label><input type="checkbox"  name="my"  value="1"  />&nbsp;Мои раздачи&nbsp;</label>[<b>&reg;</b>]</p>
+	<p><input type="checkbox" name="dlw" value="0" disabled="disabled" />&nbsp;<a href="search.php?dlu=22822406&amp;dlw=1" class="gen">Будущие закачки&nbsp;</a></p>
+	<p><input type="checkbox" name="dlc" value="0" disabled="disabled" />&nbsp;<a href="search.php?dlu=22822406&amp;dlc=1" class="gen">Прошлые закачки&nbsp;</a></p>
+	<p class="chbox"><label><input type="checkbox"  name="oop"  value="1"  />&nbsp;Только открытые раздачи&nbsp;</label> [<span class="tor-icon tor-approved">&radic;</span>]</p>
+
+	<p class="chbox dis-if-ts"><label><input type="checkbox"  name="new"  value="1"  />&nbsp;Новые с посл. посещения&nbsp;</label>[<img src="http://static.rutracker.org/templates/default/images/icon_minipost_new.gif" class="icon1" alt="" />]&nbsp;</p>
+	<p class="chbox"><label>
+		<input type="checkbox" 			onclick="user.set('h_tsp', this.checked ? 1 : 0);"
+		/>&nbsp;Скрыть содержимое {...}
+	</label></p>
+</div>
+</fieldset>
+
+	</td>
+</tr>
+<tr>
+
+	<td colspan="2" width="50%">
+
+	<fieldset style="margin-top: 0; padding-bottom: 3px;">
+	<legend>Автор</legend>
+	<div>
+		<p class="input dis-if-ts"><input style="width: 40%"  class="post" type="text" size="16" maxlength="25" name="pn" value="" /></p>
+	</div>
+	</fieldset>
+	<fieldset style="margin-top: 4px; padding-bottom: 3px;">
+
+	<legend>Название содержит</legend>
+	<div>
+		<p class="input">
+			<input id="title-search" style="width: 95%;" class="post" type="text" size="50" maxlength="60" name="nm" value="человек-паук 2" />
+		</p>
+		<p class="chbox med" style="padding-top: 3px;">
+			<a class="med" id="cse-search-btn" href="title-search">Поиск в Google</a> &nbsp;&middot;&nbsp;
+
+			<a class="med s-all" href="search.php">Поиск по форуму</a>
+		</p>
+	</div>
+	</fieldset>
+	<fieldset style="margin-top: 4px; padding-bottom: 4px;">
+	<legend>Ссылки</legend>
+	<div>
+		<p class="chbox med" style="padding-top: 3px;">
+
+			<a class="med" href="#" onclick="return get_fs_link();">Ссылка на выбранные разделы</a> &nbsp;&middot;&nbsp;
+			<a class="med" href="./viewtopic.php?t=101236">Помощь по поиску</a>
+		</p>
+	</div>
+	</fieldset>
+
+	</td>
+</tr>
+
+</table>
+
+	<div class="tCenter" style="padding: 4px 0 6px;">
+		<input class="bold" type="submit" name="submit" value="Поиск" style="width: 140px;" />
+	</div>
+
+	</td>
+</tr>
+<tr>
+	<td style="background-color: #DEE3E7;">
+
+<table class="borderless w100" cellspacing="0">
+
+<tr>
+	<td width="1%">&nbsp;</td>
+	<td width="98%" class="pad_4 tCenter">
+	<div id="begun-tr" style="height: 18px;">&nbsp;</div>
+	<script type="text/javascript">
+	begun_init_block({
+		begun_block_id : 228438987,
+		container_id   : "begun-tr",
+		bg_color       : "DEE3E7",
+		location_href  : document.location.href
+	});
+	</script>
+	</td>
+	<td width="1%">&nbsp;</td>
+</tr>
+</table>
+
+	</td>
+</tr>
+</table>
+
+</form>
+</div><!--/search_opt-->
+
+<script type="text/javascript">
+$(function(){
+	$('#title-search').bind('keyup blur mouseleave', function(){
+		var disabled = (this.value != '');
+		ts_dis_selects( disabled );
+	});
+	ts_dis_selects( $('#title-search').val() != '' );
+});
+function ts_dis_selects (disabled) {
+	$('p.dis-if-ts').find('select, input').attr('disabled',  disabled ? 1 : 0);
+}
+</script>
+
+<div class="spacer_6"></div>
+
+<div id="search-results" style="display: none;">
+
+<table class="w100 border bw_TRL" cellpadding="0" cellspacing="0">
+<tr>
+
+	<td class="cat pad_2">
+
+	<table cellspacing="0" cellpadding="0" class="borderless w100">
+	<tr>
+
+		<td class="small bold nowrap tRight" width="100%" style="padding: 2px 8px 5px 4px;">
+			&nbsp;
+			<a class="menu-root" href="#tr-options">Опции показа</a>
+		</td>
+
+	</tr>
+	</table>
+
+	</td>
+</tr>
+</table>
+
+<div class="menu-sub" id="tr-options">
+	<table cellspacing="1" cellpadding="4">
+	<tr>
+		<th>Опции показа</th>
+
+	</tr>
+	<tr>
+		<td>
+			<fieldset>
+			<legend>Раздачи</legend>
+			<div class="med pad_4">
+				<label>
+					<input type="checkbox"  checked="checked" 						onclick="user.set('hl_tr', this.checked ? 1 : 0);"
+					/>подсвечивать строки под курсором
+				</label>
+
+							</div>
+			</fieldset>
+		</td>
+	</tr>
+	<tr>
+		<td class="cat tCenter pad_4"><input type="button" value="Отправить" style="width: 100px;" onclick="window.location.reload();" /></td>
+	</tr>
+	</table>
+</div><!--/tr-options-->
+
+<style type="text/css">
+#tor-tbl u { display: none; }
+.seed-leech { padding-left: 1px; padding-right: 0; }
+.tr_tm { margin-top: 2px; font-size: 10px; color: #676767; }
+.ch { font-style: italic; color: #0080FF; }
+.tor-size { padding: 7px 4px 6px !important; }
+tr.hl-tr:hover td { background-color: #F8F8F8 !important; }</style>
+<script type="text/javascript">
+$(function(){
+	$('#tor-tbl').tablesorter(); //	{debug: true}
+});
+</script>
+
+<table class="forumline tablesorter" id="tor-tbl">
+<thead>
+<tr>
+	<th class="{sorter: false}">&nbsp;</th>
+	<th class="{sorter: false}">&nbsp;</th>
+	<th class="{sorter: 'text'}" width="25%"><b class="tbs-text">Форум</b></th>
+	<th class="{sorter: 'text'}" width="75%"><b class="tbs-text">Тема</b></th>
+
+	<th class="{sorter: 'text'}"><b class="tbs-text">Автор</b></th>
+	<th class="{sorter: 'digit'}"><b class="tbs-text">Размер</b></th>
+	<th class="seed-leech {sorter: 'digit'}" title="Сиды"><b class="tbs-text">S</b></th>
+	<th class="seed-leech {sorter: 'digit'}" title="Личи"><b class="tbs-text">L</b></th>
+	<th class="{sorter: 'digit'}" title="Торрент скачан"><b class="tbs-text">C</b></th>
+	<th class="{sorter: 'digit'}"><b class="tbs-text">Добавлен</b></th>
+
+</tr>
+</thead>
+<tbody>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=313">Зарубежное кино (HD Video)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3676224">Человек-паук<wbr> 2.1 / Spider-Man 2.1 (Сэм Рэйми / Sam Raimi) [2004, США, фэнтези, боевик, триллер, криминал, BDRip 720p] MVO</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=3993082">m0j0</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>8529538393</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3676224">7.94&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>25</b></td>
+	<td class="row4 leechmed" title="Личи"><b>2</b></td>
+	<td class="row4 small">126</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1312256495</u>
+		<p>2-Авг-11</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=185">Звуковые дорожки и Переводы</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3532059">Человек-паук<wbr> 2.1 / Spider-Man 2.1 [2004, AC3, NTSC] [Recut Version] DUB + Sub (Rus / Forced)</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=1380329">Garrry1111</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>912604801</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3532059">870&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>1</b></td>
+	<td class="row4 leechmed" title="Личи"><b>3</b></td>
+	<td class="row4 small">270</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1303008291</u>
+		<p>17-Апр-11</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=313">Зарубежное кино (HD Video)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3526414">Человек-паук<wbr> 2.1 / Spider-man 2.1 (Сэм Рэйми / Sam Raimi) [2004, США, боевик, фэнтези, приключения,<wbr> BDRip 720p] [Recut version]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=2409019">miscalin11</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>6225912328</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3526414">5.8&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>50</b></td>
+	<td class="row4 leechmed" title="Личи"><b>2</b></td>
+	<td class="row4 small">1084</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1302710612</u>
+		<p>13-Апр-11</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=2091">Фильмы 2001-2005</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3458402">Человек-паук<wbr> 2 / Spider-Man 2 (Сэм Рэйми / Sam Raimi) [2004, США, Фэнтези, Боевик, Криминал, HDRip] AVO (Королёв)</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=15154645">AngelOfTrue</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>803098624</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3458402">766&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>38</b></td>
+	<td class="row4 leechmed" title="Личи"><b>1</b></td>
+	<td class="row4 small">1046</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1299225362</u>
+		<p>4-Мар-11</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=185">Звуковые дорожки и Переводы</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3437721">Человек-паук<wbr> 2 / Spider-Man 2 (Сэм Рэйми / Sam Raimi) [2004 г., комикс, AC3, NTSC, SUP] DVO (Tycoon) + Original + Sub (Eng, Rus)</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=4113175">MАDHEAD</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>861377338</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3437721">821&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>0</b></td>
+	<td class="row4 leechmed" title="Личи"><b>1</b></td>
+	<td class="row4 small">195</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1298207052</u>
+		<p>20-Фев-11</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=926">Человек-Паук / Новые приключения Человека-паука</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3393832">Грандиозный Человек-Паук<wbr>/ Новые приключения Человека-пау<wbr>ка / The Spectacular Spider-man / полный 2 сезон (Дэйв Баллок / Dave Bullock, Дженнифер Койл / Jennifer Coyle) [2009,мультфи<wbr>льм,приключе<wbr>ния,DVDRip-A<wbr>VC] DUB &quot;Selena internationa<wbr>l&quot; (СТС)</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=7847249">medvezhonokk<wbr>kk</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>1582491156</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3393832">1.47&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>83</b></td>
+	<td class="row4 leechmed" title="Личи"><b>7</b></td>
+	<td class="row4 small">2353</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1296144304</u>
+		<p>27-Янв-11</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=926">Человек-Паук / Новые приключения Человека-паука</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3393766">Грандиозный Человек-Паук<wbr> / Новые приключения Человека-пау<wbr>ка / The Spectacular Spider-man / полный 2 сезон (Дэйв Баллок / Dave Bullock, Дженнифер Койл / Jennifer Coyle) [2009, мультфильм, приключения,<wbr> DVDRip] DUB &quot;Selena internationa<wbr>l&quot; (СТС)</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=7847249">medvezhonokk<wbr>kk</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>2676305920</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3393766">2.49&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>49</b></td>
+	<td class="row4 leechmed" title="Личи"><b>3</b></td>
+	<td class="row4 small">1600</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1296142449</u>
+		<p>27-Янв-11</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=313">Зарубежное кино (HD Video)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3354912">Человек-паук<wbr> 2 / Spider-Man 2 (Сэм Рэйми / Sam Raimi) [720p] [2004 г., боевик, фэнтези, приключения,<wbr> BDRip] [Theatrical Cut] Dub + DVO Tycoon + AVO + Original + Subs (rus, eng)</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=2062223">stfuuu</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>9714261093</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3354912">9.05&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>38</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">1160</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1294318311</u>
+		<p>6-Янв-11</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=926">Человек-Паук / Новые приключения Человека-паука</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3332898">Человек-паук<wbr> / Spider-Man: The Animated Series / Сезон 2 / Серии 1-14 (14) (Боб Ричардсон / Bob Richardson) [1995, мультфильм, фантастика, боевик, триллер, криминал, DVDRip-AVC]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=13017186">Dmaster</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>2946538109</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3332898">2.74&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>135</b></td>
+	<td class="row4 leechmed" title="Личи"><b>6</b></td>
+	<td class="row4 small">3678</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1293187684</u>
+		<p>24-Дек-10</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=2091">Фильмы 2001-2005</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3323362">Человек-паук<wbr> 2 / Spider-man 2 (Сэм Рэйми / Sam Raimi) [2004 г., Триллер, Фантастика, Боевик, Криминал, HDRip] DVO (Tycoon) Театральная версия</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=2096105">Scarabey</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>802029490</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3323362">765&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>20</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">1177</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1292703687</u>
+		<p>18-Дек-10</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=2091">Фильмы 2001-2005</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3323070">Человек-паук<wbr> 2 / Spider-man 2 (Сэм Рэйми / Sam Raimi) [2004 г., Триллер, Фантастика, Боевик, Криминал, HDRip] DVO (Tycoon) Театральная версия</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=2096105">Scarabey</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>1567535960</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3323070">1.46&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>72</b></td>
+	<td class="row4 leechmed" title="Личи"><b>2</b></td>
+	<td class="row4 small">2306</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1292695712</u>
+		<p>18-Дек-10</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=785">Саундтреки к зарубежным фильмам (mp3 и другие lossy-форматы)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3280312">(Soundtrack)<wbr> Человек-паук<wbr> 1; 2; 3: Враг в отражении // Spider-Man - 1; 2; 3 [Full Collection] - 2002-2007, MP3 (tracks), 320 kbps</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=14006249">swan80</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>463101858</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3280312">442&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>29</b></td>
+	<td class="row4 leechmed" title="Личи"><b>6</b></td>
+	<td class="row4 small">779</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1290800634</u>
+		<p>26-Ноя-10</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="сомнительно"><span class="tor-icon tor-approved">#</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=796">Неофициальные саундтреки к фильмам и сериалам (mp3 и другие lossy-форматы)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3282866">[Soundtrack / Unofficial] Человек паук - 1; 2; 3: Враг в отражении / Spider-Man 1; 2; 3 - 2002-2007, MP3 (tracks), 128-320 kbps</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=14006249">swan80</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>90274501</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3282866">86&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>2</b></td>
+	<td class="row4 leechmed" title="Личи"><b>1</b></td>
+	<td class="row4 small">137</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1290727670</u>
+		<p>26-Ноя-10</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=786">Саундтреки к зарубежным фильмам (lossless)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3280401">(Soundtrack)<wbr> Человек-паук<wbr> 2 / Spider-Man 2 (by Danny Elfman &amp; VA) - 2004, FLAC (tracks+.cue), lossless</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=14006249">swan80</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>437055965</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3280401">417&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>4</b></td>
+	<td class="row4 leechmed" title="Личи"><b>1</b></td>
+	<td class="row4 small">148</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1290612577</u>
+		<p>24-Ноя-10</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=785">Саундтреки к зарубежным фильмам (mp3 и другие lossy-форматы)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3279041">(Score) Человек-паук<wbr> / Человек-паук<wbr> 2 // Spider-Man 1 &amp; 2 [Full Collection] (by Danny Elfman) - 2002-2004, MP3 (tracks), 320 kbps</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=14006249">swan80</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>236620325</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3279041">226&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>7</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">181</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1290537261</u>
+		<p>23-Ноя-10</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=786">Саундтреки к зарубежным фильмам (lossless)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3055137">(Score) Человек-паук<wbr> 2 / Spider-Man 2 (by Danny Elfman) - 2004, FLAC (image+.cue), lossless</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=2911390">mAnah3.0</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>274844997</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3055137">262&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>3</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">258</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1278688425</u>
+		<p>9-Июл-10</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=101">Зарубежное кино (DVD)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=3035272">Человек-паук<wbr> 2 / Spider-Man 2 (Сэм Рэйми / Sam Raimi) [2004 г., комикс, фантастика, DVD5] DVO (Tycoon) + Original +rus sub</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=2368430">2al2al</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>4736158565</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=3035272">4.41&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>12</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">876</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1277582405</u>
+		<p>26-Июн-10</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=2091">Фильмы 2001-2005</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=2993650">Человек-паук<wbr> 2 / Spider-Man 2 (Сэм Рэйми / Sam Raimi) [2004, боевик, триллер, BDRip-AVC] Dub + Original + Sub (rus, eng)</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=12498050">OreoneS</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>3434106355</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=2993650">3.2&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>71</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">3585</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1275722592</u>
+		<p>5-Июн-10</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=2091">Фильмы 2001-2005</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=2958021">Человек-паук<wbr> 2.1 / Spider-man 2.1 (Сэм Рэйми / Sam Raimi) [2004 г., триллер, фантастика, боевик, BDRip] [Расширенная версия / Recut version] DVO</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=3164639">DoroshDan</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>1561802752</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=2958021">1.45&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>48</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">2555</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1273848242</u>
+		<p>14-Май-10</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=286">Видео для мобильных (3GP)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=2955208">[VIDEO4MOBILE<wbr>]Человек-паук<wbr> 2.1 / Spider-man 2.1 (Сэм Рэйми / Sam Raimi) [2004 г., фантастика, комикс, DVDRip] [3gp 320x136]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=3510453">LPBred</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>438292747</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=2955208">418&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>6</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">300</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1273839029</u>
+		<p>14-Май-10</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=127">Аркады</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=2901880">Spider-Man 2 Activity Center/Челов<wbr>ек-Паук. Новая страница</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=335219">Red_cat</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>508876800</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=2901880">485&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>97</b></td>
+	<td class="row4 leechmed" title="Личи"><b>1</b></td>
+	<td class="row4 small">6012</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1271412775</u>
+		<p>16-Апр-10</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=2082">Видео (iPod Classic, Video, Nano)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=2688210">Грандиозный Человек-Паук<wbr> 1 и 2 Сезоны / The Spectacular Spider-Man 1 &amp; 2 Seasons (Дэйв Баллок, Дженнифер Койл, Виктор Кук) [2008 г., фантастика, боевик, приключения,<wbr> мультфильм, DVDRip]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=10323947">Steamteam</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>2823786037</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=2688210">2.63&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>9</b></td>
+	<td class="row4 leechmed" title="Личи"><b>4</b></td>
+	<td class="row4 small">1502</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1269002299</u>
+		<p>19-Мар-10</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=2091">Фильмы 2001-2005</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=2612123">Человек-паук<wbr> 2.1 / Spider-Man 2.1 (Сэм Рейми / Sam Raimi) [2004 г., фантастика, боевик, триллер, HDRip] [Расширенная версия] Dub</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=10919572">&gt;&gt;$anJa&lt;&lt;</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>2342385664</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=2612123">2.18&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>42</b></td>
+	<td class="row4 leechmed" title="Личи"><b>1</b></td>
+	<td class="row4 small">3768</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1262941399</u>
+		<p>8-Янв-10</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=926">Человек-Паук / Новые приключения Человека-паука</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=2580289">Новые приключения Человека-пау<wbr>ка / The Spectacular Spider-man / весь 2 сезон (Дэйв Баллок, Дженнифер Койл) [2009 г., Мультпликаци<wbr>онный сериал, приключения,<wbr> комедия, экранизация комикса MARVEL., SATRip]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=1085379">SerGoLeOne</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>3420583936</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=2580289">3.19&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>149</b></td>
+	<td class="row4 leechmed" title="Личи"><b>7</b></td>
+	<td class="row4 small">12867</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1262516293</u>
+		<p>3-Янв-10</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=848">Картинки</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=2340720">карточки Человек Паук Герои и Злодеи 2 коллекция</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=13250862">ivan_1111</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>8303137</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=2340720">8&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>6</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">741</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1261140102</u>
+		<p>18-Дек-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=101">Зарубежное кино (DVD)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=2493292">Человек-паук<wbr> 1,2,3 (3*DVD5) / Spider-Man 1,2,3 (Сэм Рейми / Sam Raimi) [2002/2004/20<wbr>07, фантастика, боевик, приключения,<wbr> BDRip &gt; DVD5 (Custom)] Дубляж + Original + Rus, En Sub</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=7712587">PaulettoB</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>14087507968</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=2493292">13.12&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>51</b></td>
+	<td class="row4 leechmed" title="Личи"><b>11</b></td>
+	<td class="row4 small">6231</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1260106109</u>
+		<p>6-Дек-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=101">Зарубежное кино (DVD)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=2493226">Человек-паук<wbr> 1,2,3 (3*DVD9)/ Spider-Man 1,2,3 (Сэм Рейми / Sam Raimi) [2002/2004/20<wbr>07, фантастика, боевик, приключения,<wbr> BDRip &gt; DVD9(Custom)<wbr>] Дубляж + MVO/AVO + Original + Rus, En Sub</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=7712587">PaulettoB</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>25229451264</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=2493226">23.5&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>14</b></td>
+	<td class="row4 leechmed" title="Личи"><b>1</b></td>
+	<td class="row4 small">1190</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1260060850</u>
+		<p>6-Дек-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=2091">Фильмы 2001-2005</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=2443730">Человек-паук<wbr> 2.1 / Spider-man 2.1 (Сэм Рэйми / Sam Raimi) [2004 г., фантастика, боевик, триллер, фэнтези, HDRip]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=6915406">)I(ень-LLIен<wbr>ь</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>782645248</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=2443730">746&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>18</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">2094</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1258821131</u>
+		<p>21-Ноя-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=700">Видео для PSP</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=2332835">[VIDEO4PSP] Человек-паук<wbr> 2.1 / Spider-Man 2.1 (Сэм Рейми / Sam Raimi) [2004 г., Фанастика\Бо<wbr>евик\Мелодра<wbr>ма, HDRip] DUB</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=243848">Life</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>656316783</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=2332835">626&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>4</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">402</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1256079767</u>
+		<p>21-Окт-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=807">Видео</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=2297965">we are - spiderman 2 theme (Человек-пау<wbr>к 2) [видеоклип]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=4482677">Raziel800</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>44408832</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=2297965">42&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>0</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">114</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1255210047</u>
+		<p>10-Окт-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=1908">Видео (iPhone, iPod Touch)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=2105901">Мультсериал &quot;Человек<wbr>-паук&quot; 2 сезон - Неогенный кошмар / SEASON 2. Neogenic Nightmare (Боб Ричардсон) [1994 г., фантастика, семейный, мультфильм, TVRip]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=10559600">powerblade</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>2096212658</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=2105901">1.95&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>14</b></td>
+	<td class="row4 leechmed" title="Личи"><b>1</b></td>
+	<td class="row4 small">1187</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1250249160</u>
+		<p>14-Авг-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=287">Видео для смартфонов и КПК</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=2051334">[VIDEO4PDA] Человек-паук<wbr> 2 / Spider-Man 2 (Сэм Рэйми) [2004 г., фантастика, боевик, триллер, BDRip]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=8665560">plik2008</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>412664270</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=2051334">394&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>3</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">429</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1248727094</u>
+		<p>27-Июл-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=101">Зарубежное кино (DVD)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=2016989">Человек-паук<wbr> 2.1 / Spider-Man 2.1 (Сэм Рейми / Sam Raimi) [2004 г., Фантастика, боевик, триллер, фэнтези, BD&gt;DVD5 (Custom)] MVO + Original</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=5166991">lokolard</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>4422713344</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=2016989">4.12&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>3</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">441</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1247666203</u>
+		<p>15-Июл-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=2091">Фильмы 2001-2005</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=1989543">Человек-паук<wbr> 2.1 / Spider-Man 2.1 (Сэм Рэйми / Sam Raimi) [2004 г., фантастика, боевик, триллер, BDRip]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=1995480">freemen17</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>3578944256</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=1989543">3.33&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>4</b></td>
+	<td class="row4 leechmed" title="Личи"><b>3</b></td>
+	<td class="row4 small">1273</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1246823175</u>
+		<p>5-Июл-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=212">Сборники на DVD и Сиквелы</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=1944280">Человек-паук<wbr> 1,2,3 (Враг в отражении) / Spider-Man 1,2,3 (Сэм Рэйми / Sam Raimi) [2002, 2004, 2007 гг., фантастика, боевик, триллер, приключения,<wbr> HDRip] Dub</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=2080702">Petey</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>2345961472</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=1944280">2.18&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>31</b></td>
+	<td class="row4 leechmed" title="Личи"><b>6</b></td>
+	<td class="row4 small">5517</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1245376463</u>
+		<p>19-Июн-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=212">Сборники на DVD и Сиквелы</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=1924370">Человек-паук<wbr> 1,2,3 (Враг в отражении) / Spider-Man 1,2,3 (Сэм Рэйми / Sam Raimi) [2002, 2004, 2007 гг., фантастика, боевик, триллер, приключения,<wbr> HDRip] Dub</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=2080702">Petey</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>6983247872</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=1924370">6.5&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>32</b></td>
+	<td class="row4 leechmed" title="Личи"><b>4</b></td>
+	<td class="row4 small">3728</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1244765253</u>
+		<p>12-Июн-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=212">Сборники на DVD и Сиквелы</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=1910008">Человек-паук<wbr> 1,2,3 (Враг в отражении) / Spider-Man 1,2,3 (Сэм Рэйми / Sam Raimi) [2002, 2004, 2007 гг., фантастика, боевик, триллер, приключения,<wbr> HDRip] Dub</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=2080702">Petey</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>4668332032</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=1910008">4.35&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>71</b></td>
+	<td class="row4 leechmed" title="Личи"><b>2</b></td>
+	<td class="row4 small">8055</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1244344819</u>
+		<p>7-Июн-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=785">Саундтреки к зарубежным фильмам (mp3 и другие lossy-форматы)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=1863873">(Score) Человек-паук<wbr> 2 / Spider-Man 2 (Complete) (2CD) (by Danny Elfman) - 2004, MP3, 320 kbps</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=3870034">restlessg</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>232482607</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=1863873">222&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>12</b></td>
+	<td class="row4 leechmed" title="Личи"><b>1</b></td>
+	<td class="row4 small">468</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1242922077</u>
+		<p>21-Май-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=807">Видео</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=1667930">Человек-паук<wbr> 4 \ Spider-man 4 (Фанвидео 2) (Сэм Рэйми) [2009 г., Фантастика, боевик, триллер, фэнтези, драма, приключения,<wbr> DVDRip]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=9215470">Auro1995</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>6783613</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=1667930">6&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>4</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">2593</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1237484838</u>
+		<p>19-Мар-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=2091">Фильмы 2001-2005</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=1501417">Человек-паук<wbr> 2 / Spider-man 2 (Сэм Рэйми / Sam Raimi) [2004 г., Триллер / Фантастика / Боевик / Криминал, HDRip]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=3164639">DoroshDan</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>1565595648</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=1501417">1.46&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>170</b></td>
+	<td class="row4 leechmed" title="Личи"><b>2</b></td>
+	<td class="row4 small">12967</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1233408973</u>
+		<p>31-Янв-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=2091">Фильмы 2001-2005</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=1496559">Человек-паук<wbr> 2.1 / Spider-man 2.1 (Сэм Рейми / Sam Raimi) [2004 г., фантастика, боевик, триллер, HDRip] [recut version]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=2454569">antikillW</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>2342385664</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=1496559">2.18&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>7</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">1113</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1233290712</u>
+		<p>30-Янв-09</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=2091">Фильмы 2001-2005</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=1353943">Человек-паук<wbr> 2 / Spider-man 2 (Сэм Рэйми / Sam Raimi) [2004 г., фантастика, боевик, триллер, приключения,<wbr> DVDRip]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=6915406">)I(ень-LLIен<wbr>ь</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>735168512</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=1353943">701&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>47</b></td>
+	<td class="row4 leechmed" title="Личи"><b>1</b></td>
+	<td class="row4 small">3966</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1229457974</u>
+		<p>16-Дек-08</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=2091">Фильмы 2001-2005</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=1318234">Человек-паук<wbr>-2.1 / Spider-man-2<wbr>.1 (Сэм Рэйми / Sam Raimi) [2004 г., фантастика, комикс, DVDRip-AVC]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=2409019">miscalin11</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>735016019</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=1318234">701&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>11</b></td>
+	<td class="row4 leechmed" title="Личи"><b>1</b></td>
+	<td class="row4 small">1494</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1228489453</u>
+		<p>5-Дек-08</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=785">Саундтреки к зарубежным фильмам (mp3 и другие lossy-форматы)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=1014475">(Soundtrack)<wbr> SpiderMan 2/Человек Паук 2 - 2004, MP3 (tracks), 257-297 kbps</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=1971749">Nos</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>125941260</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=1014475">120&nbsp;MB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>4</b></td>
+	<td class="row4 leechmed" title="Личи"><b>1</b></td>
+	<td class="row4 small">331</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1216819447</u>
+		<p>23-Июл-08</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=2091">Фильмы 2001-2005</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=991239">Человек-паук<wbr> 2 / Spider-Man 2 (Сэм Рэйми) [2004 г., Фантастика, боевик, BDRip-AVC]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=578189">cotblivun</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>2338989586</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=991239">2.18&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>28</b></td>
+	<td class="row4 leechmed" title="Личи"><b>2</b></td>
+	<td class="row4 small">3944</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1215763915</u>
+		<p>11-Июл-08</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=2091">Фильмы 2001-2005</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=798444">Человек-паук<wbr> 2.1 / Spider man 2.1 ( EXTENDED CUT) (Сэм Рейми) [2004 г., фантастика ,триллер, HDRip]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=128529">tomten</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>1804974080</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=798444">1.68&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>7</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">1092</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1208521536</u>
+		<p>18-Апр-08</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=313">Зарубежное кино (HD Video)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=780055">Человек-паук<wbr> 2.1 / Spider-Man 2.1 (Сэм Рейми) [1080p] [2004 г., фантастика, боевик, триллер, фэнтези, BD-remux]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=108427">HANSMER</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>27292609540</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=780055">25.42&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>6</b></td>
+	<td class="row4 leechmed" title="Личи"><b>2</b></td>
+	<td class="row4 small">833</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1207758586</u>
+		<p>9-Апр-08</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=313">Зарубежное кино (HD Video)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=777942">Человек-паук<wbr> 2.1 / Spider-Man 2.1 (Сэм Рейми) [1080p] [2004 г., фантастика, боевик, триллер, фэнтези, BDRip]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=108427">HANSMER</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>14502873233</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=777942">13.51&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>24</b></td>
+	<td class="row4 leechmed" title="Личи"><b>1</b></td>
+	<td class="row4 small">2238</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1207676880</u>
+		<p>8-Апр-08</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=313">Зарубежное кино (HD Video)</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=770944">Человек-паук<wbr> 2.1 / Spider-Man 2.1 recut version (Сэм Рейми) [2004 г., комиксы, Blu-Ray, 1080p]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=232974">BND</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>49657484873</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=770944">46.25&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>15</b></td>
+	<td class="row4 leechmed" title="Личи"><b>1</b></td>
+	<td class="row4 small">1225</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1207428465</u>
+		<p>5-Апр-08</p>
+
+			</td>
+</tr>
+<tr class="tCenter hl-tr">
+	<td class="row1"><img src="http://static.rutracker.org/templates/default/images/icon_minipost.gif" class="icon1" alt="o" /></td>
+	<td class="row1 tCenter" title="проверено"><span class="tor-icon tor-approved">&radic;</span></td>
+	<td class="row1"><a class="gen f" href="tracker.php?f=2091">Фильмы 2001-2005</a></td>
+	<td class="row4 med tLeft u">
+		<div>
+						<a class="med tLink bold" href="./viewtopic.php?t=726697">Человек-Паук<wbr> 2 / Spider-Man 2 (2004) BDRip (Сэм Рэйми /Sam Raimi) [2004 г., Фантастика, Боевик, Драма]</a>
+
+		</div>
+			</td>
+	<td class="row1"><a class="med" href="tracker.php?pid=786628">celevra</a></td>
+	<td class="row4 small nowrap tor-size">
+		<u>2343598080</u>
+		<a class="small tr-dl dl-stub" href="http://dl.rutracker.org/forum/dl.php?t=726697">2.18&nbsp;GB &#8595;</a>	</td>
+
+	<td class="row4 seedmed"><b>13</b></td>
+	<td class="row4 leechmed" title="Личи"><b>0</b></td>
+	<td class="row4 small">1825</td>
+	<td class="row4 small nowrap" style="padding: 1px 3px 2px;" title="Добавлен">
+		<u>1205722708</u>
+		<p>17-Мар-08</p>
+
+			</td>
+</tr>
+
+</tbody>
+<tfoot>
+<tr>
+	<td class="catBottom" colspan="10">&nbsp;</td>
+</tr>
+</tfoot>
+</table>
+</div><!--/search-results-->
+
+<noscript><div class="warningBox2 bold tCenter">Для показа необходимo включить JavaScript</div></noscript>
+
+<div class="bottom_info">
+
+	<div class="nav">
+		<p style="float: left">Страница <b>1</b> из <b>2</b></p>
+		<p style="float: right"><a class="menu-root" href="#pg-jump">Страницы</a> :&nbsp;&nbsp;<b>1</b>, <a class="pg" href="tracker.php?search_id=WOW8TgDKtT4G&amp;start=50">2</a>&nbsp;&nbsp;<a class="pg" href="tracker.php?search_id=WOW8TgDKtT4G&amp;start=50">След.</a></p>
+
+		<div class="clear"></div>
+	</div>
+
+	<div class="spacer_4"></div>
+
+	<div class="clear"></div>
+
+</div><!--/bottom_info-->
+
+<script type="text/javascript">
+// Скрыть содержимое {...}
+if (user.opt_js.h_tsp) {
+	$('a.tLink').each(function(){
+		$(this).html( $(this).html().replace(/\{.+?\}/g, '{...}') );
+	});
+}
+$.each( [-1], function(i,n){ $('#fs-'+ n).attr('selected', 1) });
+$('#search_opt, #search-results').show();
+var fs_last_val = [];
+$(function(){
+		$('a.f, a.pg').each(function(){ this.href += '&nm=%F7%E5%EB%EE%E2%E5%EA-%EF%E0%F3%EA+2'; });
+	$('a.s-all').each(function(){ this.href += '?nm=%F7%E5%EB%EE%E2%E5%EA-%EF%E0%F3%EA+2'; });
+			// лимит на количество выбранных разделов
+	fs_last_val = $('#fs-main').val();
+
+	$('#fs-main').bind('change', function(){
+		var fs_val = $('#fs-main').val();
+		if (fs_val != null) {
+			if (fs_val.length > 50) {
+				alert('Вы можете выбрать максимум 50 разделов');
+				$('#fs-main').val( fs_last_val );
+			}
+			else {
+				fs_last_val = fs_val;
+			}
+		}
+	});
+		if ($.browser.mozilla) {
+		$('#fs-qs-input').focus().quicksearch('#fs-main option', {
+			delay   : 300,
+			onAfter : function(){
+				$('#fs-main optgroup').show();
+				$('#fs-main option:hidden').parent('optgroup').not( $('#fs-main :visible').parent('optgroup') ).hide();
+			}
+		});
+		$('#fs-main').attr( 'size', $('#fs-main').attr('size')-1 );
+		$('#fs-qs-div').show();
+	}
+	});
+function get_fs_link ()
+{
+	var fs_url = 'http://rutracker.org/forum/tracker.php?';
+	var fs_val = $('#fs-main').val();
+
+	if (fs_val == null) {
+		alert('Вы не выбрали разделы');
+	}
+	else {
+		fs_url += 'f[]='+ fs_val.join('&f[]=');
+		window.prompt('Ссылка на выбранные разделы:', fs_url);
+	}
+	return false;
+}
+</script>
+
+
+	</div><!--/main_content_wrap-->
+	</td><!--/main_content-->
+
+	
+	</tr></table>
+	</div>
+	<!--/page_content-->
+
+	<!--page_footer-->
+	<div id="page_footer">
+
+<div id="bn-bot-wrap">
+<div class="tCenter mrg_12">
+<table class="bCenter" width="850"><tr>
+<td><a target="_blank" style="color: darkred;" href="http://www.mtsunlim.ru/tariffs/vse-vklucheno-2300.html"><b>БЕЗЛИМИТка за 54 рубля в сутки. ВСЕ исходящие бесплатно!</b></a></td>
+</tr>
+</table>
+</div>
+
+<!--
+<div class="mrg_4 tCenter">
+<iframe src="http://link.filepost.ru/torrents.html?rnd=1986465095" frameborder=0 vspace=0 hspace=0 width="100%" height=20 marginwidth=0 marginheight=0 scrolling=no></iframe>
+</div>
+-->
+
+<div style="margin: 6px 10px; padding: 8px; border: 1px solid #B7C0C5;">
+			<table style="margin: 6px auto;"><tr>
+			<td></td>
+						<td>&nbsp;</td>
+
+			<td><iframe id='ab81dd05' name='ab81dd05' src='http://smart.besonders.ru/www/delivery/afr.php?zoneid=1&amp;cb=17654' frameborder='0' scrolling='no' width='468' height='60'><a href='http://smart.besonders.ru/www/delivery/ck.php?n=a381e7e7&amp;cb=17654' target='_blank'><img src='http://smart.besonders.ru/www/delivery/avw.php?zoneid=1&amp;cb=17654&amp;n=a381e7e7' border='0' alt='' /></a></iframe></td>
+					</tr></table>
+		<div id="mg-informers" style="width: 98%; margin: 6px auto 0; text-align: center;"></div>
+<script type="text/javascript">
+$(function(){
+	$('#mg-informers').html('<iframe src="http://mg.dt00.net/public/informers/torrents.2ru.html?rnd='+ Math.round(Math.random()*1000000) +'" frameborder=0 vspace=0 hspace=0 width="100%" height=160 marginwidth=0 marginheight=0 scrolling=no></iframe>');
+});
+</script></div>
+</div><!--/bn-bot-wrap-->
+
+		
+		<div class="clear"></div>
+
+		<br />
+
+				<div class="med bold tCenter pad_4">
+			<a href="info.php?show=user_agreement" onclick="window.open(this.href, '', InfoWinParams); return false;">Пользовательское Соглашение</a>
+						<span class="normal">&nbsp;|&nbsp;</span>
+			<a href="info.php?show=copyright_holders" onclick="window.open(this.href, '', InfoWinParams); return false;">Для правообладателей</a>
+												<span class="normal">&nbsp;|&nbsp;</span>
+			<a href="info.php?show=advert" onclick="window.open(this.href, '', InfoWinParams); return false;">Реклама на сайте</a>
+
+									<span class="normal">&nbsp;|&nbsp;</span>
+			<a href="info.php?show=press" onclick="window.open(this.href, '', InfoWinParams); return false;">Для прессы</a>
+						<span class="normal">&nbsp;|&nbsp;</span>
+			<a href="http://wiki.rutracker.org" target="_blank">Торрентпедия</a>
+			<span class="normal">&nbsp;|&nbsp;</span>
+			<a href="viewtopic.php?t=2234744" target="_blank">Для провайдеров</a>
+
+			<span class="normal">&nbsp;|&nbsp;</span>
+			<a href="http://wiki.rutracker.org/r.php?id=10004" target="_blank">Кому задать вопрос</a>
+						<span class="normal">&nbsp;|&nbsp;</span>
+			<a href="#" onclick="return post2url('torrent.php', {rand_rel: 1});">Случайная раздача</a>
+			
+		</div>
+		<br />
+		
+		
+
+<table width="99%" cellpadding="0" cellspacing="0" class="bCenter">
+<tr>
+
+	<td width="50%" class="vBottom">
+		<div class="copyright">
+			<p><a href="groupcp.php?g=104792">Администрация</a> &middot; <a href="groupcp.php?g=104787">Модераторы</a> &middot; <a href="groupcp.php?g=104841">Техническая помощь</a></p>
+		</div>
+
+	</td>
+	<td class="vBottom">
+
+		<table class="bCenter" cellspacing="0" cellpadding="2" border="0" style="padding-top: 4px;">
+	<tr>
+		<td class="vBottom nowrap" style="padding: 0 4px;">
+			<!--LiveInternet counter-->
+			<script type="text/javascript">
+			var LI_title = '';
+			document.write("<a href='http://www.liveinternet.ru/stat/rutracker.org/' "+ "target=_blank><img src='http://counter.yadro.ru/hit?t16.2;r"+escape(document.referrer)+((typeof(screen)=="undefined")?"":";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+";h"+escape(LI_title.substring(0,80))+";"+Math.random()+"' alt='' "+"border='0' width='88' height='31'><\/a>");
+			</script>
+			<!--/LiveInternet-->
+
+			<!--rambler-->
+			<a href="http://top100.rambler.ru/cgi-bin/stats_top100.cgi?1467197" target='_blank'><img src="http://top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="" width="88" height="31" border="0" /></a>
+			<!-- <script id="top100Counter" type="text/javascript" src="http://counter.rambler.ru/top100.jcn?1467197"></script> -->
+			<script type="text/javascript">
+			new Image().src = "http://counter.rambler.ru/top100.scn?1467197&rn="+Math.random()+"&rf="+escape(document.referrer);
+			</script>
+			<!--/rambler-->
+
+			<!-- SpyLOG MyStat -->
+			<span id="spylog601119"></span>
+
+			<script type="text/javascript">
+			var spylog = { counter: 601119, image: 5012, next: spylog };
+			$(document).ready(function(){
+				$.ajax({ url: "http://counter.spylog.com/cnt.js", dataType: "script", cache: true, global: false });
+			});
+			</script>
+			<!--/SpyLOG MyStat -->
+		</td>
+	</tr>
+	</table>
+	
+	</td>
+	<td width="50%" class="vBottom tRight">
+		<div class="copyright">
+
+			<p>&copy; Dreamtorrent Corp. 2005-2011</p>
+		</div>
+	</td>
+
+</tr>
+</table>
+
+	</div>
+	<!--/page_footer-->
+
+	</div>
+	<!--/page_container-->
+
+
+
+
+<div id="ajax-loading"><b>Loading...</b></div>
+<div id="ajax-error"><b>Error</b></div>
+
+	</div><!--/body_container-->
+
+</body>
+
+</html>

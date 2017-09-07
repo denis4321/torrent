@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/torrentme/!svn/ver/65/trunk/Torrent_SE/src/com/conarhco/torrent/se
+END
+Settings.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/torrentme/!svn/ver/39/trunk/Torrent_SE/src/com/conarhco/torrent/se/Settings.java
+END
+DownloaderClientMain.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/torrentme/!svn/ver/65/trunk/Torrent_SE/src/com/conarhco/torrent/se/DownloaderClientMain.java
+END
+ServerRequestTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/torrentme/!svn/ver/54/trunk/Torrent_SE/src/com/conarhco/torrent/se/ServerRequestTask.java
+END
+LogTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/torrentme/!svn/ver/63/trunk/Torrent_SE/src/com/conarhco/torrent/se/LogTask.java
+END
+TorrentWindow.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/torrentme/!svn/ver/54/trunk/Torrent_SE/src/com/conarhco/torrent/se/TorrentWindow.java
+END
+TorrentWindow.form
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/torrentme/!svn/ver/39/trunk/Torrent_SE/src/com/conarhco/torrent/se/TorrentWindow.form
+END
+HistoryWindow.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/torrentme/!svn/ver/63/trunk/Torrent_SE/src/com/conarhco/torrent/se/HistoryWindow.java
+END
+HistoryWindow.form
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/torrentme/!svn/ver/62/trunk/Torrent_SE/src/com/conarhco/torrent/se/HistoryWindow.form
+END

@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<body>
+<style type="text/css">
+<script type="text/javascript">
+<div id="fs-nav-legend" style="display: none;"></div>
+<script type="text/javascript">
+<div id="cse-form-holder" style="display: none;">
+<form id="dl-form" style="display: none;" action="" method="post"></form>
+<script type="text/javascript">
+<div id="body_container">
+<script type="text/javascript">
+<div id="page_container">
+<a name="top"></a>
+<div id="page_header">
+<div id="page_content">
+<table cellspacing="0" cellpadding="0" border="0" style="width: 100%;">
+<tbody>
+<tr>
+<td id="main_content">
+<div id="main_content_wrap">
+<table width="100%" cellspacing="0" cellpadding="2">
+<tbody>
+<tr>
+<td width="100%" valign="bottom">
+<h1 class="maintitle">Трекер</h1>
+<p class="small" style="margin: 12px 4px 8px;">
+<b>
+<a class="menu-root" href="#pg-jump">Страницы</a>
+:&nbsp;&nbsp;
+<b>1</b>
+,
+<a class="pg" href="http://rutracker.org/forum/tracker.php?search_id=WOW8TgDKtT4G&start=50&nm=%F7%E5%EB%EE%E2%E5%EA-%EF%E0%F3%EA+2">2</a>
+<a class="pg" href="http://rutracker.org/forum/tracker.php?search_id=WOW8TgDKtT4G&start=50&nm=%F7%E5%EB%EE%E2%E5%EA-%EF%E0%F3%EA+2">След.</a>
+</b>
+</p>
+<p class="med bold" style="margin: 12px 4px 10px;">Результатов поиска: 59 (max: 500)</p>
+<table width="100%" cellspacing="0" cellpadding="2">
+</td>
+<td>
+</tr>
+</tbody>
+</table>
+<div id="search_opt" style="">
+<script type="text/javascript">
+<div class="spacer_6"></div>
+<div id="search-results" style="">
+<noscript>&lt;div class="warningBox2 bold tCenter"&gt;Для показа необходимo включить JavaScript&lt;/div&gt;</noscript>
+<div class="bottom_info">
+<script type="text/javascript">
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="page_footer">
+</div>
+<div id="ajax-loading">
+<div id="ajax-error">
+</div>
+<div id="fs-nav-list" class="menu-sub">
+<div id="pg-jump" class="menu-sub">
+<div id="dls-menu" class="menu-sub">
+<div id="tr-options" class="menu-sub">
+</body>
+</html>

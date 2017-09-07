@@ -1,0 +1,213 @@
+* {
+    border: 0 none;
+    margin: 0;
+}
+body {
+   
+    background-repeat: repeat-x;
+    margin: auto;
+    max-width: 960px;
+    min-width: 960px;
+}
+.navIcons {
+    margin-top: 30px;
+}
+#home {
+    height: 700px;
+    margin-bottom: 100px;
+    margin-top: -70px;
+}
+#about {
+    height: 810px;
+    margin-bottom: 100px;
+    padding-top: 50px;
+    position: relative;
+}
+#portfolio {
+    height: 100%;
+    margin-bottom: 100px;
+    padding-top: 50px;
+    position: relative;
+}
+#contacts {
+    height: 220px;
+}
+.footer {
+    font-size: 12px;
+    margin-top: 200px;
+    position: relative;
+}
+p.thumbDescription {
+    margin-left: 10px;
+    margin-top: 165px;
+    position: absolute;
+    width: 185px;
+}
+img.thumbOne {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: white;
+    border-color: #DDDDDD #AAAAAA #AAAAAA #DDDDDD;
+    border-style: solid;
+    border-width: 1px;
+    float: left;
+    margin-bottom: 40px;
+    margin-right: 42px;
+    padding: 8px 8px 30px;
+}
+img.thumbTwo {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: white;
+    border-color: #DDDDDD #AAAAAA #AAAAAA #DDDDDD;
+    border-style: solid;
+    border-width: 1px;
+    float: left;
+    margin-bottom: 40px;
+    margin-right: 42px;
+    padding: 8px 8px 30px;
+}
+img.thumbThr {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: white;
+    border-color: #DDDDDD #AAAAAA #AAAAAA #DDDDDD;
+    border-style: solid;
+    border-width: 1px;
+    float: left;
+    margin-bottom: 40px;
+    margin-right: 42px;
+    padding: 8px 8px 30px;
+}
+img.thumbFou {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: white;
+    border-color: #DDDDDD #AAAAAA #AAAAAA #DDDDDD;
+    border-style: solid;
+    border-width: 1px;
+    float: left;
+    margin-bottom: 40px;
+    padding: 8px 8px 30px;
+}
+.divider {
+    background-image: url("../images/content/divider.png");
+    background-repeat: no-repeat;
+    height: 5px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    width: 960px;
+}
+img.left {
+    float: left;
+    padding-bottom: 20px;
+    padding-right: 20px;
+}
+img.right {
+    float: right;
+    padding-bottom: 20px;
+    padding-left: 20px;
+}
+p.aboutText {
+    line-height: 24px;
+    padding-bottom: 22px;
+}
+p.copyright {
+    line-height: 24px;
+    margin-left: 0;
+    padding-bottom: 22px;
+    text-align: center;
+}
+a {
+    color: #E44D26;
+    text-decoration: none;
+}
+#facebookLike {
+    margin-left: 295px;
+    margin-top: 295px;
+    position: absolute;
+}
+#twitterLike {
+    margin-left: 625px;
+    margin-top: 295px;
+    position: absolute;
+}
+.charger {
+   
+    height: 151px;
+    margin-left: 25px;
+    margin-top: 130px;
+    position: absolute;
+    width: 152px;
+}
+#iMac {
+    height: 219px;
+    margin-left: 185px;
+    margin-top: 80px;
+    position: absolute;
+    width: 656px;
+}
+#iPad {
+    height: 230px;
+    margin-left: 733px;
+    margin-top: 228px;
+    position: absolute;
+    width: 219px;
+}
+#coffee {
+    background-image: url("../images/coffee.png");
+    height: 108px;
+    margin-left: 107px;
+    margin-top: 309px;
+    position: absolute;
+    width: 154px;
+}
+.logo {
+    background-image: url("../../images/logo.png");
+    height: 96px;
+    margin-left: 339px;
+    margin-top: 332px;
+    position: absolute;
+    width: 336px;
+}
+.headset {
+    background-image: url("../../images/headset.png");
+    height: 279px;
+    margin-left: 175px;
+    margin-top: 417px;
+    position: absolute;
+    width: 481px;
+}
+#iPhone {
+    height: 166px;
+    margin-left: 85px;
+    margin-top: 449px;
+    position: absolute;
+    width: 148px;
+}
+#keyboard {
+    height: 128px;
+    margin-left: 335px;
+    margin-top: 471px;
+    position: absolute;
+    width: 348px;
+}
+#mouse {
+    height: 124px;
+    margin-left: 718px;
+    margin-top: 431px;
+    position: absolute;
+    width: 111px;
+}
